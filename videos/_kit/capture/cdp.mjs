@@ -85,7 +85,7 @@ class Page {
 export async function connect() {
   const base = process.env.CDP_URL || 'http://127.0.0.1:9333';
   const list = await (await fetch(base + '/json/list')).json();
-  const t = list.find(x => x.type === 'page' && x.url.includes('devin.ai')) || list.find(x => x.type === 'page');
+  const t = list.find(x => x.type === 'page' && (x.url.includes('devin.ai') || x.url.includes('devinenterprise.com'))) || list.find(x => x.type === 'page');
   const ws = new WebSocket(t.webSocketDebuggerUrl); await new Promise((res, rej) => { ws.onopen = res; ws.onerror = rej; });
   const p = new Page(ws);
   await p.send('Page.enable'); await p.send('Runtime.enable');

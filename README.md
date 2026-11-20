@@ -7,6 +7,12 @@
 - 実際の Devin の画面を毎回新しく録画し、待ち時間は早送りして見やすく編集します
 - 機能が切り替わるところに章カード（番号・機能名・説明・全体の中の位置）を入れます
 
+## 完成した動画
+
+| 動画 | 内容 | 長さ |
+|---|---|---|
+| [`videos/01-usagi-bank-overview/`](videos/01-usagi-bank-overview/) | Usagi-Bank で解析 → COBOL→Java 移行 → ブラウザテスト → Devin Review（Web 版） | 約 2 分 21 秒 |
+
 ## フォルダ構成
 
 | パス | 内容 |
