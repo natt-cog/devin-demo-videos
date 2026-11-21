@@ -3,11 +3,11 @@ window.SPEC = {
   "subtitle": "COBOL の日次バッチを、解析から移行・テスト・レビューまで",
   "outro": "解析 → 移行 → テスト → レビューを Devin が一続きで実行",
   "outroSub": "docs.devin.ai",
-  "speed": 3,
+  "speed": 4,
   "cps": 48,
   "maxZoom": 1.4,
   "capArrows": false,
-  "pollRunMax": 2.4,
+  "pollRunMax": 1.6,
   "edit": {
     "0000.png": {
       "chapter": {
@@ -15,27 +15,27 @@ window.SPEC = {
         "sub": "Ask Devin が COBOL を読み、根拠付きで説明",
         "short": "解析"
       },
-      "hold": 1.6,
+      "hold": 0.96,
       "cursor": false,
       "cap": "勘定系 Usagi-Bank の日次バッチを Ask Devin で調べます"
     },
     "0003.png": {
       "cap": "Ask モードを選びます",
-      "hold": 1.6
+      "hold": 0.96
     },
     "0006.png": {
-      "hold": 0.8
+      "hold": 0.7
     },
     "0009.png": {
       "cap": "リポジトリ Usagi-Bank を選択"
     },
     "0015.png": {
-      "hold": 1.6,
+      "hold": 0.96,
       "hl": true
     },
     "0018.png": {
       "cap": "COBOL の日次バッチ UBEOD001.cbl の処理を日本語で質問",
-      "hold": 2.6,
+      "hold": 1.56,
       "hl": true
     },
     "0019.png": {
@@ -71,7 +71,7 @@ window.SPEC = {
     },
     "0028.png": {
       "badge": "",
-      "hold": 3.2,
+      "hold": 1.92,
       "cap": "入出力ファイルと処理を、行番号付きの根拠リンクで説明"
     },
     "0029.png": {
@@ -111,10 +111,10 @@ window.SPEC = {
       "cap": "利息計算の流れ（対象判定 → 日次利息 → 加算）も説明"
     },
     "0041.png": {
-      "hold": 2.4
+      "hold": 1.44
     },
     "0044.png": {
-      "hold": 3.4,
+      "hold": 2.04,
       "cap": "根拠リンクから、該当する COBOL の行をすぐに確認できます"
     },
     "0045.png": {
@@ -144,20 +144,20 @@ window.SPEC = {
         "sub": "ゴールデンファイルで新旧の出力一致を確認し PR を作成",
         "short": "移行"
       },
-      "hold": 1.2,
+      "hold": 0.72,
       "cap": "エージェントモードで移行作業を依頼します"
     },
     "0055.png": {
-      "hold": 1.4
+      "hold": 0.84
     },
     "0058.png": {
-      "hold": 0.8
+      "hold": 0.7
     },
     "0060.png": {
       "cap": "@ でリポジトリを指定"
     },
     "0065.png": {
-      "hold": 3.4,
+      "hold": 2.04,
       "hl": true,
       "cap": "移行・1 バイト単位の一致テスト・PR 作成までを依頼"
     },
@@ -323,7 +323,7 @@ window.SPEC = {
     },
     "0108.png": {
       "badge": "",
-      "hold": 4.2,
+      "hold": 2.52,
       "cap": "PR #69 を作成。ゴールデンファイルと 1 バイト単位で一致し、テスト 51 件が成功"
     },
     "0109.png": {
@@ -332,11 +332,11 @@ window.SPEC = {
         "sub": "Devin がアプリを動かし、画面操作を録画",
         "short": "テスト"
       },
-      "hold": 1.2,
+      "hold": 0.72,
       "cap": "続けて、画面での動作確認を依頼します"
     },
     "0112.png": {
-      "hold": 3.2,
+      "hold": 1.92,
       "hl": true,
       "cap": "バッチ実行後、口座照会画面の未払利息が更新されるか確認・録画するよう依頼"
     },
@@ -486,14 +486,14 @@ window.SPEC = {
     },
     "0151.png": {
       "badge": "",
-      "hold": 2.2,
+      "hold": 1.32,
       "cap": "確認結果と録画がチャットに届きます"
     },
     "0152.png": {
-      "hold": 1.6
+      "hold": 0.96
     },
     "0155.png": {
-      "hold": 1.2,
+      "hold": 0.72,
       "cap": "録画を再生"
     },
     "0156.png": {
@@ -594,7 +594,7 @@ window.SPEC = {
     },
     "0180.png": {
       "badge": "",
-      "hold": 3.4,
+      "hold": 2.04,
       "cap": "確認項目 7 件すべて成功"
     },
     "0181.png": {
@@ -606,16 +606,22 @@ window.SPEC = {
         "sub": "PR を自動でレビューし、指摘を Devin が修正",
         "short": "レビュー"
       },
-      "hold": 1.8,
+      "hold": 1.08,
       "cap": "PR #69 を Devin Review で開きます"
     },
     "0185.png": {
-      "hold": 2.8,
+      "hold": 1.68,
       "cap": "Devin Review の指摘 4 件を、Devin がすべて自動で修正済み"
     },
     "0188.png": {
-      "hold": 4.6,
+      "hold": 2.76,
       "cap": "修正内容: 入力エラー時の戻り値、テストのタイムアウト、手順書、COBOL との比較テスト"
     }
-  }
+  },
+  "chapterHold": 2.4,
+  "introHold": 2.0,
+  "tailHold": 1.0,
+  "capBase": 0.6,
+  "capCps": 11,
+  "capFloor": 2.0
 };

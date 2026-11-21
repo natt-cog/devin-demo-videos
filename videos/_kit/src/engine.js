@@ -41,7 +41,7 @@ function build() {
   let cap = undefined, badge = undefined, capT = 0;
   const hs = x => sec(x * (S.pace ?? 1.2));
   // reading time: ~3 words/s in English, ~8 characters/s in Japanese
-  const capMin = text => S.capMin ?? Math.max(2.6, 1.0 + (CJK.test(text) ? text.replace(/\s/g, '').length / 8 : text.split(/\s+/).length * 0.3));
+  const capMin = text => S.capMin ?? Math.max(S.capFloor ?? 2.6, (S.capBase ?? 1.0) + (CJK.test(text) ? text.replace(/\s/g, '').length / (S.capCps ?? 8) : text.split(/\s+/).length * 0.3));
   const beats = BEATS.map(b => ({ ...b, ...(edits[b.img] || {}) })).filter(b => !b.skip);
   tl.scenes = {};
   // a ring belongs to its beat's shot: fade it out before the next shot replaces it

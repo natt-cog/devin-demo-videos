@@ -11,7 +11,7 @@
 
 | 動画 | 内容 | 長さ |
 |---|---|---|
-| [`videos/01-usagi-bank-overview/`](videos/01-usagi-bank-overview/) | Usagi-Bank で解析 → COBOL→Java 移行 → ブラウザテスト → Devin Review（Web 版） | 約 2 分 21 秒 |
+| [`videos/01-usagi-bank-overview/`](videos/01-usagi-bank-overview/) | Usagi-Bank で解析 → COBOL→Java 移行 → ブラウザテスト → Devin Review（Web 版） | 約 1 分 46 秒 |
 
 ## フォルダ構成
 
