@@ -1,0 +1,45 @@
+{
+  "recordedAt": "2026-11-21 (JST)",
+  "account": "Natt Org (natt.devinenterprise.com), demo account, UI language 日本語; email masked with MASK_TEXT",
+  "frames": {
+    "0000-0030": {
+      "part": "1 基本的な使い方",
+      "sec": "1-1 DeepWiki",
+      "url": "https://natt.devinenterprise.com/org/natt-org/wiki/natt-cog/Usagi-Bank",
+      "proves": "Usagi-Bank DeepWiki (language set to 日本語): page tree, architecture diagram, Web UI page"
+    },
+    "0031-0049": {
+      "part": "1",
+      "sec": "1-2 Wiki と会話",
+      "session": "https://natt.devinenterprise.com/search/77579703-3921-408d-90ec-15c95f7538d9",
+      "proves": "Question asked from the wiki chat box; Ask Devin answers which files to change (header.jspf, usagi.css, usagi.js, login.jsp) with code citations"
+    },
+    "0050-0075": {
+      "part": "1",
+      "sec": "1-3 プラン",
+      "session": "https://natt.devinenterprise.com/search/77579703-3921-408d-90ec-15c95f7538d9",
+      "proves": "Devinプロンプトを構築 builds a plan card from the conversation; Devin セッションを開始 starts the agent session"
+    },
+    "0040-0053": {
+      "note": "duplicate take of the answer scroll (unused, skip in spec)"
+    },
+    "0076-0103": {
+      "part": "1",
+      "sec": "1-4 実装",
+      "session": "https://natt.devinenterprise.com/sessions/98053a1912f54310a28be32c27919d81",
+      "proves": "Agent implements dark mode, mvn test 39/39, opens https://github.com/natt-cog/Usagi-Bank/pull/70; Devin Review passed"
+    },
+    "0104-0188": {
+      "part": "1",
+      "sec": "1-5 テストと録画",
+      "session": "https://natt.devinenterprise.com/sessions/98053a1912f54310a28be32c27919d81",
+      "proves": "Record theme toggle test: Devin drives the browser, recording 画面テーマ切替の検証 7 成功 / 0 失敗, played back"
+    },
+    "0189-": {
+      "part": "1",
+      "sec": "1-6 Devin Review",
+      "url": "https://natt.devinenterprise.com/review/natt-cog/usagi-bank/pull/70",
+      "proves": "Devin Review page for PR #70"
+    }
+  }
+}

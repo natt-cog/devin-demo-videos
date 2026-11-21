@@ -1,0 +1,17 @@
+{
+  "recordedAt": "2026-11-21 (JST)",
+  "frames": {
+    "0000-0030": {
+      "sec": "3-1 レスポンダーの作成",
+      "url": "https://natt.devinenterprise.com/org/natt-org/oncall/ef002087455440adbc9ead78d79451b7",
+      "proves": "Responder うさぎマーケットのアラート調査: Slack メッセージ trigger in #usagi-alerts, type アラート, Ultra"
+    },
+    "0031-0130": {
+      "sec": "3-2 アラートの調査",
+      "url": "https://app.slack.com/client/T0C3WMJB96G/C0CKN6ZNE8M",
+      "session": "https://natt.devinenterprise.com/sessions/8f4c4f5fa12f47f793ca092edfd409a8",
+      "proves": "Second test alert (after Oncall setup finished) posted 9:14 PM; responder replied in thread: 影響なし（低）, no telemetry for web-1, found a separate /checkout 500 bug for nonexistent product IDs (reproduced locally), Confidence: Uncertain, recommendation, full report link"
+    },
+    "note": "First test alert (8:52 PM) was skipped because org Oncall setup had not finished; it remains visible in the channel above the second alert"
+  }
+}

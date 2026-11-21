@@ -1,0 +1,25 @@
+{
+  "recordedAt": "2026-11-21 (JST)",
+  "frames": {
+    "0000-0069": {
+      "sec": "2-1 Automation の作成",
+      "url": "https://natt.devinenterprise.com/org/natt-org/automations",
+      "proves": "Automation 作成: name, Slack Message trigger in #usagi-bugs (thread reply), Japanese instructions"
+    },
+    "0070-0074": {
+      "sec": "2-1",
+      "url": "https://natt.devinenterprise.com/org/natt-org/automations/b807b1d1fa4740c9b1fa02aa435a4f9d",
+      "proves": "Automation saved and enabled"
+    },
+    "0075-0101": {
+      "sec": "2-2 Slack の不具合報告",
+      "url": "https://app.slack.com/client/T0C3WMJB96G/C0CLMSJATGQ",
+      "proves": "Test bug report posted in #usagi-bugs (nattenterprise.slack.com); Devin replies in thread"
+    },
+    "0102-": {
+      "sec": "2-3 調査と結果",
+      "session": "https://natt.devinenterprise.com/sessions/7967b6b4aca4448da80ead0410d0eef4",
+      "proves": "Devin reproduces the bug (total ¥-480 saved), cites app.py lines, opens https://github.com/natt-cog/usagi-ecommerce/pull/3 with 2 new tests (14 pass), replies in the Slack thread"
+    }
+  }
+}
