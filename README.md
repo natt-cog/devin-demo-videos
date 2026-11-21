@@ -12,7 +12,7 @@
 | 動画 | 内容 | 長さ |
 |---|---|---|
 | [`videos/01-usagi-bank-overview/`](videos/01-usagi-bank-overview/) | Usagi-Bank で解析 → COBOL→Java 移行 → ブラウザテスト → Devin Review（Web 版） | 約 1 分 46 秒 |
-| [`videos/02-devin-feature-tour/`](videos/02-devin-feature-tour/) | 4 部構成の機能紹介：基本的な使い方（DeepWiki → 実装 → テスト録画 → Devin Review）・Automations・Devin On-call・Devin Security | LENGTH |
+| [`videos/02-devin-feature-tour/`](videos/02-devin-feature-tour/) | 4 部構成の機能紹介：基本的な使い方（DeepWiki → 実装 → テスト録画 → Devin Review）・Automations・Devin On-call・Devin Security | 約 6 分 42 秒 |
 
 ## フォルダ構成
 
