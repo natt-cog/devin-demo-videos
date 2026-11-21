@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
-"""Merge per-part capture folders (shots_p1..shots_p4) into shots/ for the renderer.
-Images become p<N>-<orig>.png so spec.js keys stay stable when a part is re-shot."""
-import json, os, shutil, glob
+"""Merge per-part capture folders into shots/ for the renderer.
+shots_p<N> plus optional re-take folders shots_p<N>_<x> (in name order) become one part:
+images are renumbered p<N>-0000.png, p<N>-0001.png, ... so spec.js keys stay stable."""
+import json, os, shutil, glob, re
 here = os.path.dirname(os.path.abspath(__file__))
 out = os.path.join(here, 'shots')
 shutil.rmtree(out, ignore_errors=True); os.makedirs(out)
-beats = []
-for d in sorted(glob.glob(os.path.join(here, 'shots_p[0-9]'))):
-    tag = 'p' + d[-1]
-    for b in json.load(open(os.path.join(d, 'beats.json'))):
-        name = f"{tag}-{b['img']}"
-        os.link(os.path.join(d, b['img']), os.path.join(out, name))
-        beats.append({**b, 'img': name})
+beats, used = [], []
+for n in sorted({re.match(r'shots_p(\d)', os.path.basename(d)).group(1) for d in glob.glob(os.path.join(here, 'shots_p[0-9]*'))}):
+    i = 0
+    for d in sorted(glob.glob(os.path.join(here, f'shots_p{n}')) + glob.glob(os.path.join(here, f'shots_p{n}_*'))):
+        used.append(os.path.basename(d))
+        for b in json.load(open(os.path.join(d, 'beats.json'))):
+            name = f"p{n}-{i:04d}.png"; i += 1
+            os.link(os.path.join(d, b['img']), os.path.join(out, name))
+            beats.append({**b, 'img': name})
 json.dump(beats, open(os.path.join(out, 'beats.json'), 'w'), indent=1)
-print('merged', len(beats), 'beats from', [os.path.basename(x) for x in sorted(glob.glob(os.path.join(here, 'shots_p[0-9]')))])
+print('merged', len(beats), 'beats from', used)

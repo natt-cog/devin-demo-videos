@@ -716,226 +716,105 @@ window.SPEC = {
    "hold": 2.8
   },
   "p3-0000.png": {
-   "skip": true
-  },
-  "p3-0001.png": {
-   "skip": true
-  },
-  "p3-0002.png": {
-   "skip": true
+   "chapter": {
+    "no": "第 3 部",
+    "title": "Devin On-call",
+    "sub": "これから、アラートを Devin に調査させる方法を説明します",
+    "short": "Devin On-call"
+   },
+   "sec": {
+    "no": "3-1",
+    "title": "レスポンダーの作成"
+   },
+   "cap": "Devin On-call は、アラートやバグ報告を Devin が自動で調査する機能です",
+   "hold": 2.4
   },
   "p3-0003.png": {
-   "skip": true
-  },
-  "p3-0004.png": {
-   "skip": true
-  },
-  "p3-0005.png": {
-   "skip": true
-  },
-  "p3-0006.png": {
-   "skip": true
-  },
-  "p3-0007.png": {
-   "skip": true
-  },
-  "p3-0008.png": {
-   "skip": true
-  },
-  "p3-0009.png": {
-   "skip": true
-  },
-  "p3-0010.png": {
-   "skip": true
-  },
-  "p3-0011.png": {
-   "skip": true
-  },
-  "p3-0012.png": {
-   "skip": true
-  },
-  "p3-0013.png": {
-   "skip": true
-  },
-  "p3-0014.png": {
-   "skip": true
-  },
-  "p3-0015.png": {
-   "skip": true
-  },
-  "p3-0016.png": {
-   "skip": true
-  },
-  "p3-0017.png": {
-   "skip": true
-  },
-  "p3-0018.png": {
-   "skip": true
-  },
-  "p3-0019.png": {
-   "skip": true
-  },
-  "p3-0020.png": {
-   "skip": true
-  },
-  "p3-0021.png": {
-   "skip": true
-  },
-  "p3-0022.png": {
-   "skip": true
-  },
-  "p3-0023.png": {
-   "skip": true
-  },
-  "p3-0024.png": {
-   "skip": true
-  },
-  "p3-0025.png": {
-   "skip": true
-  },
-  "p3-0026.png": {
-   "skip": true
+   "cap": "レスポンダーを作成し、名前を入力"
   },
   "p3-0027.png": {
-   "skip": true
-  },
-  "p3-0028.png": {
-   "skip": true
-  },
-  "p3-0029.png": {
-   "skip": true
+   "cap": "Slack の #usagi-alerts へのメッセージをトリガーにします",
+   "hold": 2.2
   },
   "p3-0030.png": {
-   "skip": true
+   "cap": "レスポンダーができました",
+   "hold": 1.8
   },
   "p3-0031.png": {
-   "skip": true
-  },
-  "p3-0032.png": {
-   "skip": true
-  },
-  "p3-0033.png": {
-   "skip": true
-  },
-  "p3-0034.png": {
-   "skip": true
-  },
-  "p3-0035.png": {
-   "skip": true
-  },
-  "p3-0036.png": {
-   "skip": true
-  },
-  "p3-0037.png": {
-   "skip": true
-  },
-  "p3-0038.png": {
-   "skip": true
-  },
-  "p3-0039.png": {
-   "skip": true
-  },
-  "p3-0040.png": {
-   "skip": true
-  },
-  "p3-0041.png": {
-   "skip": true
-  },
-  "p3-0042.png": {
-   "skip": true
-  },
-  "p3-0043.png": {
-   "skip": true
-  },
-  "p3-0044.png": {
-   "skip": true
-  },
-  "p3-0045.png": {
-   "skip": true
-  },
-  "p3-0046.png": {
-   "skip": true
-  },
-  "p3-0047.png": {
-   "skip": true
-  },
-  "p3-0048.png": {
-   "skip": true
-  },
-  "p3-0049.png": {
-   "skip": true
-  },
-  "p3-0050.png": {
-   "skip": true
-  },
-  "p3-0051.png": {
-   "skip": true
-  },
-  "p3-0052.png": {
-   "skip": true
-  },
-  "p3-0053.png": {
-   "skip": true
-  },
-  "p3-0054.png": {
-   "skip": true
-  },
-  "p3-0055.png": {
-   "skip": true
-  },
-  "p3-0056.png": {
-   "skip": true
+   "sec": {
+    "no": "3-2",
+    "title": "アラートの調査"
+   },
+   "cap": "#usagi-alerts に、テスト用のアラートを投稿します"
   },
   "p3-0057.png": {
-   "skip": true
+   "badge": "早送り",
+   "cap": "Devin がコードと変更履歴を調べて、アラートを調査中"
   },
   "p3-0058.png": {
-   "skip": true
+   "badge": "早送り",
+   "cap": "Devin がコードと変更履歴を調べて、アラートを調査中"
   },
   "p3-0059.png": {
-   "skip": true
+   "badge": "早送り",
+   "cap": "Devin がコードと変更履歴を調べて、アラートを調査中"
   },
   "p3-0060.png": {
-   "skip": true
+   "badge": "早送り",
+   "cap": "Devin がコードと変更履歴を調べて、アラートを調査中"
   },
   "p3-0061.png": {
-   "skip": true
+   "badge": "早送り",
+   "cap": "Devin がコードと変更履歴を調べて、アラートを調査中"
   },
   "p3-0062.png": {
-   "skip": true
+   "badge": "早送り",
+   "cap": "Devin がコードと変更履歴を調べて、アラートを調査中"
   },
   "p3-0063.png": {
-   "skip": true
+   "badge": "早送り",
+   "cap": "Devin がコードと変更履歴を調べて、アラートを調査中"
   },
   "p3-0064.png": {
-   "skip": true
+   "badge": "早送り",
+   "cap": "Devin がコードと変更履歴を調べて、アラートを調査中"
   },
   "p3-0065.png": {
-   "skip": true
+   "badge": "早送り",
+   "cap": "Devin がコードと変更履歴を調べて、アラートを調査中"
   },
   "p3-0066.png": {
-   "skip": true
+   "badge": "早送り",
+   "cap": "Devin がコードと変更履歴を調べて、アラートを調査中"
   },
   "p3-0067.png": {
-   "skip": true
+   "badge": "早送り",
+   "cap": "Devin がコードと変更履歴を調べて、アラートを調査中"
   },
   "p3-0068.png": {
-   "skip": true
+   "badge": "早送り",
+   "cap": "Devin がコードと変更履歴を調べて、アラートを調査中"
   },
   "p3-0069.png": {
-   "skip": true
+   "badge": "早送り",
+   "cap": "Devin がコードと変更履歴を調べて、アラートを調査中"
   },
   "p3-0070.png": {
-   "skip": true
+   "badge": "早送り",
+   "cap": "Devin がコードと変更履歴を調べて、アラートを調査中"
   },
   "p3-0071.png": {
-   "skip": true
+   "badge": "早送り",
+   "cap": "Devin がコードと変更履歴を調べて、アラートを調査中"
   },
   "p3-0072.png": {
-   "skip": true
+   "badge": "早送り",
+   "cap": "Devin がコードと変更履歴を調べて、アラートを調査中"
   },
   "p3-0073.png": {
-   "skip": true
+   "badge": "",
+   "cap": "Devin がスレッドに調査結果を返信しました",
+   "hold": 2.2
   },
   "p3-0074.png": {
    "skip": true
@@ -1044,6 +923,168 @@ window.SPEC = {
   },
   "p3-0109.png": {
    "skip": true
+  },
+  "p3-0110.png": {
+   "skip": true
+  },
+  "p3-0111.png": {
+   "skip": true
+  },
+  "p3-0112.png": {
+   "skip": true
+  },
+  "p3-0113.png": {
+   "skip": true
+  },
+  "p3-0114.png": {
+   "skip": true
+  },
+  "p3-0115.png": {
+   "skip": true
+  },
+  "p3-0116.png": {
+   "skip": true
+  },
+  "p3-0117.png": {
+   "skip": true
+  },
+  "p3-0118.png": {
+   "skip": true
+  },
+  "p3-0119.png": {
+   "skip": true
+  },
+  "p3-0120.png": {
+   "skip": true
+  },
+  "p3-0121.png": {
+   "skip": true
+  },
+  "p3-0122.png": {
+   "cap": "判定は「影響なし（低）」。テスト用のため、裏付けるログやメトリクスはありません",
+   "hold": 3.0
+  },
+  "p3-0123.png": {
+   "cap": "別件として、/checkout が 500 を返す不具合を見つけて再現しています"
+  },
+  "p3-0124.png": {
+   "cap": "別件として、/checkout が 500 を返す不具合を見つけて再現しています"
+  },
+  "p3-0125.png": {
+   "cap": "別件として、/checkout が 500 を返す不具合を見つけて再現しています"
+  },
+  "p3-0126.png": {
+   "cap": "別件として、/checkout が 500 を返す不具合を見つけて再現しています"
+  },
+  "p3-0127.png": {
+   "cap": "別件として、/checkout が 500 を返す不具合を見つけて再現しています"
+  },
+  "p3-0128.png": {
+   "cap": "別件として、/checkout が 500 を返す不具合を見つけて再現しています"
+  },
+  "p3-0129.png": {
+   "cap": "別件として、/checkout が 500 を返す不具合を見つけて再現しています"
+  },
+  "p3-0130.png": {
+   "cap": "確信度と、次に取るべき対応もあわせて返ってきます",
+   "hold": 2.6
+  },
+  "p3-0131.png": {
+   "skip": true
+  },
+  "p3-0132.png": {
+   "skip": true
+  },
+  "p3-0133.png": {
+   "skip": true
+  },
+  "p3-0134.png": {
+   "skip": true
+  },
+  "p3-0135.png": {
+   "skip": true
+  },
+  "p3-0136.png": {
+   "skip": true
+  },
+  "p3-0137.png": {
+   "sec": {
+    "no": "3-3",
+    "title": "グループ化とイシュー"
+   },
+   "cap": "同じアラートを、もう一度投稿します"
+  },
+  "p3-0162.png": {
+   "badge": "早送り",
+   "cap": "Devin が過去のアラートと照合中"
+  },
+  "p3-0163.png": {
+   "badge": "早送り",
+   "cap": "Devin が過去のアラートと照合中"
+  },
+  "p3-0164.png": {
+   "badge": "早送り",
+   "cap": "Devin が過去のアラートと照合中"
+  },
+  "p3-0165.png": {
+   "badge": "早送り",
+   "cap": "Devin が過去のアラートと照合中"
+  },
+  "p3-0166.png": {
+   "badge": "早送り",
+   "cap": "Devin が過去のアラートと照合中"
+  },
+  "p3-0167.png": {
+   "skip": true
+  },
+  "p3-0168.png": {
+   "skip": true
+  },
+  "p3-0169.png": {
+   "skip": true
+  },
+  "p3-0170.png": {
+   "skip": true
+  },
+  "p3-0171.png": {
+   "skip": true
+  },
+  "p3-0172.png": {
+   "skip": true
+  },
+  "p3-0173.png": {
+   "cap": "再発したアラートのスレッドを開きます",
+   "badge": ""
+  },
+  "p3-0176.png": {
+   "cap": "前回と同じアラートだと判断し、調査を重複させません",
+   "hold": 3.0
+  },
+  "p3-0177.png": {
+   "cap": "同じ問題は 1 件のイシューにまとまります（発生 2 回）",
+   "hold": 2.8
+  },
+  "p3-0180.png": {
+   "cap": "イベントごとに、調査したかどうかを確認できます",
+   "hold": 2.2
+  },
+  "p3-0181.png": {
+   "cap": "概要には、アラートの件数と特定した問題の数が表示されます",
+   "hold": 2.2
+  },
+  "p3-0182.png": {
+   "skip": true
+  },
+  "p3-0183.png": {
+   "sec": {
+    "no": "3-4",
+    "title": "レポート"
+   },
+   "cap": "調査の内容は、定期レポートにまとめて Slack に送れます"
+  },
+  "p3-0186.png": {
+   "cap": "レスポンダー・対象・頻度・投稿先を指定して作成します（今回は設定画面の紹介のみ）",
+   "hold": 3.0
   },
   "p4-0000.png": {
    "chapter": {

@@ -534,6 +534,39 @@ if (PHASE === 'ocsave') {
   console.log('URL', await p.evaluate(() => location.href));
   console.log((await main()).slice(0, 800));
 }
+if (PHASE === 'ocissue') {
+  const RESP = process.env.OC_URL || ORG + '/oncall/ef002087455440adbc9ead78d79451b7';
+  await r.goto(RESP, 7000); await tidy();
+  await p.mouse.move(700, 300); r.cur = { x: 700, y: 300 };
+  await r.shot({ hold: 2.2, mark: 'ocissues' });
+  console.log('ISSUES', (await main()).slice(0, 1200));
+  const ev = await r.find({ text: 'イベント', sel: 'main button, main [role=tab]' });
+  if (ev) { await r.click(ev, { pre: { hlBox: ev }, wait: 2500 }); await r.shot({ hold: 2.2, mark: 'ocevents' }); }
+  await r.goto(ORG + '/oncall?tab=alerts', 6000); await tidy();
+  await r.shot({ hold: 2.2, mark: 'ocalerts' });
+  console.log('ALERTS', (await main()).slice(0, 1200));
+  await r.goto(ORG + '/oncall?tab=reports', 6000); await tidy();
+  await r.shot({ hold: 2.2, mark: 'ocreports' });
+  console.log('REPORTS', (await main()).slice(0, 1200));
+}
+if (PHASE === 'ocreport') {
+  await r.goto(ORG + '/oncall?tab=reports', 6000); await tidy();
+  await p.mouse.move(700, 300); r.cur = { x: 700, y: 300 };
+  await r.shot({ hold: 1.6, mark: 'ocreports' });
+  const b = await r.find({ text: 'レポートを作成', sel: 'main button' });
+  await r.click(b, { pre: { hlBox: b }, wait: 3000 });
+  await r.shot({ hold: 2.0, mark: 'ocrepform' });
+  console.log('FORM', await p.evaluate(() => { const d = [...document.querySelectorAll('[role=dialog]')].filter(d => !/移動esc/.test(d.innerText)).pop(); return (d ? d.innerText : document.querySelector('main').innerText).slice(0, 2000); }));
+  console.log('CTRL', await p.evaluate(() => [...document.querySelectorAll('[role=dialog] button, [role=dialog] input, [role=dialog] textarea')].filter(e => e.getBoundingClientRect().width > 0).map(e => e.tagName + ':' + (e.innerText || e.placeholder || e.getAttribute('aria-label') || '').trim().slice(0, 30)).join(' | ')));
+}
+if (PHASE === 'slacklast') {
+  await r.goto('https://app.slack.com/client/T0C3WMJB96G/' + (process.env.SLACK_CH || 'C0CKN6ZNE8M'), 9000);
+  await p.mouse.move(700, 300); r.cur = { x: 700, y: 300 };
+  await r.shot({ hold: 1.4, mark: 'slacklast' });
+  const b = await p.evaluate(() => { const e = [...document.querySelectorAll('[data-qa="reply_bar_count"], button, a')].filter(e => /\d+ repl/.test(e.innerText)).pop(); const r = e.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2, w: r.width, h: r.height }; });
+  await r.click(b, { pre: { hlBox: b }, wait: 3500 });
+  await r.shot({ hold: 3.0, mark: 'grouped' });
+}
 if (PHASE === 'wikiask') {
   if (process.env.WIKI_URL) await r.goto(process.env.WIKI_URL, 5000);
   await wikiTidy();
