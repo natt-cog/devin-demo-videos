@@ -35,7 +35,7 @@ const shotURL = img => `../../${V}/shots/${img}`;
 function build() {
   const S = SPEC, edits = S.edit || {};
   const INTRO = sec(S.introHold ?? 3.4), ENTER = sec(1.2);
-  const tl = { steps: [], caps: [], cams: [], badges: [], clicks: [], typing: [], cursorHide: [], rings: [], hls: [], chapters: [] };
+  const tl = { steps: [], caps: [], cams: [], badges: [], clicks: [], typing: [], cursorHide: [], rings: [], hls: [], chapters: [], secs: [] };
   const bt = [];
   let t = INTRO, cur = { x: VW / 2 + 120, y: VH * 0.78 }, shown = null, speed = S.speed ?? 4;
   let cap = undefined, badge = undefined, capT = 0;
@@ -77,6 +77,8 @@ function build() {
       clipRing(null, t); tl.caps.push({ t, text: '', pos: 'bottom' }); cap = undefined;
       tl.chapters.push({ ...b.chapter, t0: t, t1: t + d, prev: shown, i: tl.chapters.length }); t += d;
     }
+    // sec: {no, title} marks a section inside a part: a lower-third label slides in and the top-right HUD updates (no extra time)
+    if (b.sec) tl.secs.push({ ...b.sec, t });
     if (S.noCaps) b = { ...b, cap: undefined };
     if (VO) {
       b = { ...b, cap: undefined };
@@ -429,12 +431,63 @@ function drawCaption(f) {
 function drawBadge(f) {
   const k = lastBefore(TL.badges, f); if (!k || !k.text) return;
   const a = eOut(prog(f, k.t, k.t + 16));
-  font(40, 600); const tw = ctx.measureText(k.text).width; const w = tw + 130, h = 88, x = W - 90 - w, y = 90;
+  font(40, 600); const tw = ctx.measureText(k.text).width; const w = tw + 130, h = 88, x = W - 90 - w, y = SPEC.hud !== false && TL.chapters.length && hudState(f).c ? 200 : 90;
   ctx.save(); ctx.globalAlpha = a; rr(x, y, w, h, 44); ctx.fillStyle = DARK ? 'rgba(44,44,46,.94)' : 'rgba(25,25,25,.9)'; ctx.fill();
   if (DARK) { rr(x + 1, y + 1, w - 2, h - 2, 43); ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(255,255,255,.14)'; ctx.stroke(); }
   ctx.fillStyle = '#fff'; // fast-forward glyph
   for (const o of [0, 26]) { ctx.beginPath(); ctx.moveTo(x + 36 + o, y + 28); ctx.lineTo(x + 60 + o, y + 44); ctx.lineTo(x + 36 + o, y + 60); ctx.closePath(); ctx.fill(); }
   ctx.textBaseline = 'middle'; ctx.fillText(k.text, x + 106, y + h / 2 + 2); ctx.textBaseline = 'alphabetic'; ctx.restore();
+}
+
+// Top-right HUD: current part (last chapter card) and section, with one dot per part.
+function hudState(f) {
+  const c = lastBefore(TL.chapters.map(x => ({ ...x, t: x.t0 })), f), s = lastBefore(TL.secs, f);
+  return { c, s: s && c && s.t >= c.t0 ? s : null };
+}
+function drawHud(f) {
+  if (SPEC.hud === false || !TL.chapters.length) return;
+  const { c, s } = hudState(f); if (!c) return;
+  const a = eOut(prog(f, c.t1, c.t1 + sec(0.6)));
+  if (a <= 0) return;
+  const part = (c.no ? c.no + '　' : '') + (c.short || c.title), sub = s ? (s.no ? s.no + '　' : '') + s.title : '';
+  font(38, 600); const pw = spacedW(part, 0.5); font(38, 400); const sw = sub ? spacedW(sub, 0.5) : 0;
+  const n = TL.chapters.length, dots = n * 22 + (n - 1) * 14, sep = sub ? 50 : 0;
+  const w = 70 + dots + 40 + pw + sep + sw + 60, h = 92, x = W - 90 - w, y = 80;
+  ctx.save(); ctx.globalAlpha = a;
+  ctx.shadowColor = 'rgba(0,0,0,.12)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 10;
+  rr(x, y, w, h, 46); ctx.fillStyle = DARK ? 'rgba(44,44,46,.94)' : 'rgba(255,255,255,.96)'; ctx.fill();
+  ctx.shadowColor = 'transparent'; rr(x + 1, y + 1, w - 2, h - 2, 45); ctx.lineWidth = 2; ctx.strokeStyle = `rgba(${INKRGB},.08)`; ctx.stroke();
+  let cx = x + 70;
+  for (let j = 0; j < n; j++) {
+    ctx.beginPath(); ctx.arc(cx + 11, y + h / 2, 11, 0, Math.PI * 2);
+    ctx.fillStyle = j === c.i ? 'rgba(32,120,255,1)' : j < c.i ? 'rgba(32,120,255,.35)' : `rgba(${INKRGB},.14)`; ctx.fill();
+    cx += 36;
+  }
+  cx += 40 - 14; ctx.textBaseline = 'middle';
+  font(38, 600); ctx.fillStyle = INK; spaced(part, cx, y + h / 2 + 2, 0.5); cx += pw;
+  if (sub) {
+    const k = eOut(prog(f, s.t, s.t + sec(0.5)));
+    ctx.fillStyle = `rgba(${INKRGB},.22)`; ctx.fillRect(cx + 24, y + 26, 3, h - 52); cx += sep;
+    font(38, 400); ctx.fillStyle = `rgba(${INKRGB},${0.72 * k})`; spaced(sub, cx, y + h / 2 + 2 + 10 * (1 - k), 0.5);
+  }
+  ctx.textBaseline = 'alphabetic'; ctx.restore();
+}
+// Lower-third: section number and title slide in from the left for ~2 s when a section starts.
+function drawSecLabel(f) {
+  const s = lastBefore(TL.secs, f); if (!s) return;
+  const D = sec(s.hold ?? SPEC.secHold ?? 2.2), e = f - s.t; if (e > D) return;
+  const a = eOutQuint(prog(f, s.t, s.t + sec(0.5))) * (1 - eInOut(prog(f, s.t + D - sec(0.4), s.t + D)));
+  if (a <= 0) return;
+  font(44, 500, 'JetBrains Mono'); const nw = s.no ? spacedW(s.no, 2) : 0; font(64, 600); const tw = spacedW(s.title, 0.5);
+  const w = 80 + (nw ? nw + 44 : 0) + tw + 80, h = 140, x = 120 - 60 * (1 - a), y = H - 560;
+  ctx.save(); ctx.globalAlpha = a;
+  ctx.shadowColor = 'rgba(0,0,0,.16)'; ctx.shadowBlur = 50; ctx.shadowOffsetY = 12;
+  rr(x, y, w, h, 24); ctx.fillStyle = DARK ? 'rgba(44,44,46,.96)' : 'rgba(255,255,255,.97)'; ctx.fill();
+  ctx.shadowColor = 'transparent'; ctx.fillStyle = 'rgba(32,120,255,1)'; rr(x, y, 12, h, 6); ctx.fill();
+  ctx.textBaseline = 'middle'; let cx = x + 80;
+  if (nw) { font(44, 500, 'JetBrains Mono'); ctx.fillStyle = 'rgba(32,120,255,1)'; spaced(s.no, cx, y + h / 2 + 2, 2); cx += nw + 44; }
+  font(64, 600); ctx.fillStyle = INK; spaced(s.title, cx, y + h / 2 + 4, 0.5);
+  ctx.textBaseline = 'alphabetic'; ctx.restore();
 }
 function drawOutro(f, p) {
   drawBackdrop();
@@ -510,7 +563,7 @@ async function renderFrame(f) {
       if (q > 0.55) { ctx.save(); ctx.globalAlpha = prog(q, 0.55, 1); drawOutro(f, p); ctx.restore(); }
     } else drawOutro(f, p);
   }
-  if (f >= I && f < U + sec(0.4) && !TL.chapters.some(c => f >= c.t0 && f < c.t1)) { ctx.save(); ctx.globalAlpha = 1 - prog(f, U, U + sec(0.4)); drawCaption(f); drawBadge(f); ctx.restore(); }
+  if (f >= I && f < U + sec(0.4) && !TL.chapters.some(c => f >= c.t0 && f < c.t1)) { ctx.save(); ctx.globalAlpha = 1 - prog(f, U, U + sec(0.4)); drawSecLabel(f); drawHud(f); drawCaption(f); drawBadge(f); ctx.restore(); }
 }
 
 // a subtitle chunk of more than 10 words (vo_onetake falls back to one chunk when voSay differs) is split by character share of its time
