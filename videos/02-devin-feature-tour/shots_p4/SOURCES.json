@@ -2,8 +2,30 @@
   "recordedAt": "2026-11-21 (JST)",
   "note": "Part 4 recorded before Parts 2/3 into shots_p4; merge after Part 3 when building the spec",
   "frames": {
-    "0000-0019": { "sec": "4-1 スキャン開始", "url": "https://natt.devinenterprise.com/org/natt-org/security/new", "proves": "通常スキャン, usagi-ecommerce selected, Devinで続行" },
-    "0020-0103": { "sec": "4-1 脅威モデル", "session": "https://natt.devinenterprise.com/org/natt-org/security/sessions/3dce88fe89a144ac8b227625484ec497", "proves": "Devin asks 5 threat-model questions (answered), writes threat_model.md" },
-    "0104-": { "sec": "4-2 指摘", "session": "https://natt.devinenterprise.com/org/natt-org/security/sessions/3dce88fe89a144ac8b227625484ec497", "proves": "Scan runs with no extra approval step; findings panel shows 40 open (critical 15, high 11, medium 8, low 6); Devin recommends fixing 26 (全 26 件を修正)" }
+    "0000-0019": {
+      "sec": "4-1 スキャン開始",
+      "url": "https://natt.devinenterprise.com/org/natt-org/security/new",
+      "proves": "通常スキャン, usagi-ecommerce selected, Devinで続行"
+    },
+    "0020-0103": {
+      "sec": "4-1 脅威モデル",
+      "session": "https://natt.devinenterprise.com/org/natt-org/security/sessions/3dce88fe89a144ac8b227625484ec497",
+      "proves": "Devin asks 5 threat-model questions (answered), writes threat_model.md"
+    },
+    "0104-0146": {
+      "sec": "4-1 スキャン",
+      "session": "https://natt.devinenterprise.com/org/natt-org/security/sessions/3dce88fe89a144ac8b227625484ec497",
+      "proves": "Scan runs (10 min 22 s, fast-forwarded): スキャン完了, 15 open findings (critical 8, high 3, medium 1, low 3)"
+    },
+    "0147-0156": {
+      "sec": "4-2 指摘の確認",
+      "session": "https://natt.devinenterprise.com/org/natt-org/security/sessions/3dce88fe89a144ac8b227625484ec497",
+      "proves": "Findings list; detail of critical SQL injection in product search (sfind-b3bf3d8628c5489299aa38b9988da18f)"
+    },
+    "0157-": {
+      "sec": "4-3 Devinで修正",
+      "session": "https://natt.devinenterprise.com/org/natt-org/security/sessions/70a84914cfc24cbf95f83ed29d9febbb",
+      "proves": "Devinで修正 starts fix session; Devin parameterizes the search SQL, adds a regression test, opens https://github.com/natt-cog/usagi-ecommerce/pull/2 (CI passed)"
+    }
   }
 }

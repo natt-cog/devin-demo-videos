@@ -364,6 +364,56 @@ if (PHASE === 'secwait') {
   console.log('BTNS', JSON.stringify(await btns()));
   console.log((await main()).slice(-3000));
 }
+if (PHASE === 'secdone') {
+  await tidy();
+  await r.poll(Number(process.env.WAIT || 5400000), 15000, { cap: null, keep }, async () => !/実行中/.test(await p.evaluate(() => document.body.innerText.slice(0, 20000))));
+  r.mark('scandone');
+  console.log((await main()).slice(-2500));
+}
+if (PHASE === 'secfind') {
+  await tidy();
+  const btns = () => p.evaluate(() => [...document.querySelectorAll('button, a')].filter(b => b.getBoundingClientRect().width > 0).map(b => b.innerText.trim().slice(0, 40) + (b.href ? '=' + b.href : '')).filter(Boolean));
+  await p.mouse.move(700, 300); r.cur = { x: 700, y: 300 };
+  await r.shot({ hold: 2.4, mark: 'scancard' });
+  const v = await r.find({ text: '件の検出結果を表示', exact: false, sel: 'button, a' });
+  await r.click(v, { pre: { hlBox: v }, wait: 5000 });
+  await tidy(); await p.mouse.move(700, 300); r.cur = { x: 700, y: 300 };
+  await r.shot({ hold: 2.4, mark: 'findings' });
+  console.log('URL', await p.evaluate(() => location.href));
+  console.log('BTNS', JSON.stringify(await btns()));
+  console.log((await main()).slice(0, 2500));
+}
+if (PHASE === 'secdetail') {
+  await tidy();
+  const f = await r.find({ text: process.env.FINDING || '商品検索の SQL インジェクション', exact: false, sel: 'button, a, [role=row], tr' });
+  if (!f) throw new Error('finding not found');
+  await r.click(f, { pre: { hlBox: f }, wait: 4000 });
+  await tidy(); await p.mouse.move(700, 300); r.cur = { x: 700, y: 300 };
+  await r.shot({ hold: 2.6, mark: 'finding' });
+  console.log('URL', await p.evaluate(() => location.href));
+  console.log('BTNS', JSON.stringify(await p.evaluate(() => [...document.querySelectorAll('button, a')].filter(b => b.getBoundingClientRect().width > 0 && b.getBoundingClientRect().x > 700).map(b => b.innerText.trim().slice(0, 30) + '@' + Math.round(b.getBoundingClientRect().x) + ',' + Math.round(b.getBoundingClientRect().y)).filter(x => !x.startsWith('@')))));
+  console.log(await p.evaluate(() => document.body.innerText.slice(0, 0) + [...document.querySelectorAll('[role=dialog], aside, section')].map(e => e.innerText).join('\n---\n').slice(0, 2000)));
+}
+if (PHASE === 'secfix') {
+  await tidy();
+  const b = await r.find({ text: 'Devinで修正', sel: 'button' });
+  if (!b) throw new Error('no fix button');
+  await r.click(b, { pre: { hlBox: b }, wait: 6000 });
+  console.log('TABS', (await (await fetch('http://127.0.0.1:9333/json/list')).json()).filter(x => x.type === 'page').map(x => x.url).join(' '));
+  console.log('URL', await p.evaluate(() => location.href));
+  console.log('BTNS', JSON.stringify(await p.evaluate(() => [...document.querySelectorAll('[role=dialog] button, main button')].filter(b => b.getBoundingClientRect().width > 0).map(b => b.innerText.trim().slice(0, 30)).filter(Boolean))));
+  console.log(await p.evaluate(() => [...document.querySelectorAll('[role=dialog]')].map(e => e.innerText).join('\n---\n').slice(0, 1500)));
+  await r.shot({ hold: 1.6, mark: 'fixclicked' });
+}
+if (PHASE === 'secfix2') {
+  const b = await p.evaluate(() => { const d = [...document.querySelectorAll('[role=dialog]')].find(d => /ベースブランチ/.test(d.innerText)); if (!d) return null; const e = [...d.querySelectorAll('button')].filter(b => b.innerText.trim() === 'Devinで修正').pop(); const r = e.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2, w: r.width, h: r.height }; });
+  if (!b) throw new Error('no dialog');
+  await r.click(b, { pre: { hlBox: b }, wait: 9000 });
+  console.log('TABS', (await (await fetch('http://127.0.0.1:9333/json/list')).json()).filter(x => x.type === 'page').map(x => x.url).join(' '));
+  console.log('URL', await p.evaluate(() => location.href));
+  console.log('LINKS', JSON.stringify(await p.evaluate(() => [...new Set([...document.querySelectorAll('a[href*="/sessions/"]')].map(a => a.innerText.trim().slice(0, 30) + '=' + a.href))].slice(0, 8))));
+  await tidy(); await r.shot({ hold: 1.8, mark: 'fixstarted' });
+}
 if (PHASE === 'wikiask') {
   if (process.env.WIKI_URL) await r.goto(process.env.WIKI_URL, 5000);
   await wikiTidy();
