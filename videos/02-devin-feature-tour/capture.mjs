@@ -10,7 +10,7 @@ const TASK = process.env.TASK || 'batch/cobol/UBEOD001.cbl（日次利息積数�
 const TEST = process.env.TEST || 'ありがとうございます。次に、アプリを起動して Java 版バッチで日次利息計算を実行・取り込みし、ブラウザで口座照会画面を開いて未払利息が更新されていることを確認してください。ブラウザ操作は録画して見せてください。';
 const QUESTION = process.env.QUESTION || 'batch/cobol/UBEOD001.cbl はどんな処理をしていますか？入力・出力ファイルと利息計算の流れを教えてください。';
 
-const r = await new Rec('shots').init();
+const r = await new Rec(process.env.SHOTS || 'shots').init();
 const p = r.p;
 const main = () => p.evaluate(() => document.querySelector('main')?.innerText || '');
 const boxOf = (sel, pick = 'last') => p.evaluate(([sel, pick]) => {
@@ -150,9 +150,15 @@ if (PHASE === 'work') {
 if (PHASE === 'test') {
   await session(); await scrollChat(); await sleep(800);
   await r.shot({ hold: 1.0, mark: 'pre-test' });
-  const ed = await boxOf('main [contenteditable=true]');
-  await r.click(ed, { wait: 400 });
-  await sendPrompt(TEST, 'test-asked');
+  if (process.env.REC_BTN) {
+    const btn = await r.find({ text: process.env.REC_BTN, sel: 'main button' });
+    if (!btn) throw new Error('no record button');
+    await r.click(btn, { pre: { hlBox: btn }, wait: 2500 }); r.mark('test-asked');
+  } else {
+    const ed = await boxOf('main [contenteditable=true]');
+    await r.click(ed, { wait: 400 });
+    await sendPrompt(TEST, 'test-asked');
+  }
   await sleep(5000); await tidy();
   let t0 = Date.now(), last = '', same = 0;
   const hasVideo = () => p.evaluate(() => [...document.querySelectorAll('main video')].some(v => v.getBoundingClientRect().width > 0) || /録画|recording/i.test([...document.querySelectorAll('main a, main button')].map(e => e.innerText).join(' ')));
@@ -282,6 +288,20 @@ if (PHASE === 'wview') {
   await r.click(v, { wait: 7000 });
   console.log('TABS', (await (await fetch('http://127.0.0.1:9333/json/list')).json()).filter(x => x.type === 'page').map(x => x.url).join(' '));
   console.log('SESSION', await p.evaluate(() => location.href));
+}
+if (PHASE === 'review2') {
+  const url = process.env.REVIEW_URL || 'https://natt.devinenterprise.com/review/natt-cog/usagi-bank/pull/70';
+  await r.goto(url, 7000); await tidy();
+  await p.mouse.move(1000, 300); r.cur = { x: 1000, y: 300 };
+  await r.shot({ hold: 2.4, mark: 'review' });
+  const tab = await r.find({ text: 'ディスカッション', exact: false, sel: 'main button, main [role=tab]' });
+  await r.click(tab, { pre: { hlBox: tab }, wait: 3000 });
+  await p.mouse.move(1000, 300); r.cur = { x: 1000, y: 300 };
+  await r.shot({ hold: 2.0, mark: 'discussion' });
+  const sc = () => p.evaluate(dy => { const els = [...document.querySelectorAll('main *')].filter(e => e.scrollHeight > e.clientHeight + 40 && /auto|scroll/.test(getComputedStyle(e).overflowY) && e.getBoundingClientRect().width > 400); els.sort((a, b) => b.clientHeight - a.clientHeight); const e = els[0]; if (!e) return false; const b = e.scrollTop; e.scrollTop += dy; return e.scrollTop !== b; }, 70);
+  for (let i = 0; i < 30; i++) { if (!(await sc())) break; await sleep(120); await r.shot({ kind: 'poll', scroll: true }); }
+  await sleep(600); await r.shot({ hold: 2.4, mark: 'reviewend' });
+  console.log((await main()).slice(0, 3500));
 }
 if (PHASE === 'wikiask') {
   if (process.env.WIKI_URL) await r.goto(process.env.WIKI_URL, 5000);
