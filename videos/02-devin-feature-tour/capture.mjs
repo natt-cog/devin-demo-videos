@@ -303,6 +303,67 @@ if (PHASE === 'review2') {
   await sleep(600); await r.shot({ hold: 2.4, mark: 'reviewend' });
   console.log((await main()).slice(0, 3500));
 }
+if (PHASE === 'sec1') {
+  await r.goto(ORG + '/security/new', 6000); await tidy();
+  await p.mouse.move(700, 250); r.cur = { x: 700, y: 250 };
+  await r.shot({ hold: 2.0, mark: 'secnew' });
+  const normal = await r.find({ text: '通常スキャン', exact: false, sel: 'main span' });
+  if (normal) await r.click(normal, { pre: { hlBox: normal }, wait: 900 });
+  const q = await r.box('main input[placeholder="リポジトリを検索"], main input[aria-label="リポジトリを検索"]');
+  await r.click(q, { wait: 400 });
+  await r.type('usagi-ecommerce', { every: 3 }); await sleep(1500);
+  const row = await p.evaluate(() => { const tr = [...document.querySelectorAll('main tr, main [role=row]')].find(t => /natt-cog\/usagi-ecommerce/.test(t.innerText) && t.getBoundingClientRect().width > 0); if (!tr) return null; const c = [...tr.querySelectorAll('span,button,label,[role=checkbox]')].find(e => /行を選択/.test((e.innerText || '') + (e.getAttribute('aria-label') || '')) && e.getBoundingClientRect().width > 0) || tr; const b = c.getBoundingClientRect(); return { x: b.x + b.width / 2, y: b.y + b.height / 2, w: b.width, h: b.height }; });
+  if (!row) throw new Error('ecommerce row not found');
+  console.log('ROW', JSON.stringify(row));
+  await r.click(row, { wait: 900 });
+  await r.shot({ hold: 1.6, mark: 'secrepo' });
+  if (/1 つ以上選択してください/.test(await main())) throw new Error('repo not selected');
+  const go = await r.find({ text: 'Devinで続行', sel: 'main button' });
+  await r.click(go, { pre: { hlBox: go }, wait: 8000 });
+  await tidy();
+  console.log('URL', await p.evaluate(() => location.href));
+  let last = '', same = 0;
+  await r.poll(Number(process.env.WAIT || 600000), 4000, { cap: null, keep }, async () => {
+    const t = await main(); same = t === last && t.length > 400 ? same + 1 : 0; last = t; return same >= 4;
+  });
+  r.mark('threatq');
+  console.log('URL', await p.evaluate(() => location.href));
+  console.log((await main()).slice(-3500));
+}
+if (PHASE === 'secans') {
+  await tidy();
+  const pick = process.env.PICKS ? process.env.PICKS.split(',') : ['C', 'A', 'A', 'A', 'A', 'A'];
+  for (let i = 0; i < 8; i++) {
+    const t = await main(); const m = t.match(/(\d+) \/ (\d+)/); if (!m) break;
+    const L = pick[Number(m[1]) - 1] || 'A';
+    const after = t.slice(t.indexOf(m[0]) + m[0].length).split('\n').map(x => x.trim()).filter(Boolean);
+    const optText = /^[A-Z]$/.test(L) ? null : L === '*' ? after[0] : L;
+    const opt = optText ? await r.find({ text: optText, sel: 'main button, main label, main [role=option], main [role=checkbox], main div, main span' }) : await p.evaluate(L => { const els = [...document.querySelectorAll('main *')].filter(e => e.getBoundingClientRect().width > 100 && new RegExp('^' + L + '\\s').test((e.innerText || '').trim()) && (e.innerText || '').length < 120); const e = els.filter(e => !els.some(o => o !== e && e.contains(o) && o.getBoundingClientRect().width > 100)).pop() || els.pop(); if (!e) return null; const b = e.getBoundingClientRect(); return { x: b.x + b.width / 2, y: b.y + b.height / 2, w: b.width, h: b.height, t: e.innerText.trim().slice(0, 60) }; }, L);
+    console.log('Q', m[0], (t.match(/\n([^\n]*？)\n/) || [])[1], '->', opt && opt.t);
+    if (!opt) break;
+    await r.shot({ hold: 1.4 });
+    await r.click(opt, { pre: { hlBox: opt }, wait: 1000 });
+    const next = await r.find({ text: '次へ', sel: 'main button' }) || await r.find({ text: '送信', sel: 'main button' });
+    if (next) await r.click(next, { wait: 1500 });
+    await sleep(800);
+    if (!/(\d+) \/ (\d+)/.test(await main())) break;
+  }
+  r.mark('answered');
+  let last = '', same = 0;
+  await r.poll(Number(process.env.WAIT || 900000), 5000, { cap: null, keep }, async () => {
+    const t = await main(); same = t === last ? same + 1 : 0; last = t; return same >= 4 || /承認|Approve|スキャンを開始/.test(t.slice(-1500));
+  });
+  r.mark('proposal');
+  console.log((await main()).slice(-3000));
+}
+if (PHASE === 'secwait') {
+  await tidy();
+  const btns = () => p.evaluate(() => [...document.querySelectorAll('main button')].filter(b => b.getBoundingClientRect().width > 0).map(b => b.innerText.trim()).filter(Boolean));
+  await r.poll(Number(process.env.WAIT || 1200000), 5000, { cap: null, keep }, async () => (await btns()).some(t => /承認|スキャンを開始|Approve|Start scan/.test(t)));
+  r.mark('proposal');
+  console.log('BTNS', JSON.stringify(await btns()));
+  console.log((await main()).slice(-3000));
+}
 if (PHASE === 'wikiask') {
   if (process.env.WIKI_URL) await r.goto(process.env.WIKI_URL, 5000);
   await wikiTidy();

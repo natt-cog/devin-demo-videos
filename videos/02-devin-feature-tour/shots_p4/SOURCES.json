@@ -1,0 +1,9 @@
+{
+  "recordedAt": "2026-11-21 (JST)",
+  "note": "Part 4 recorded before Parts 2/3 into shots_p4; merge after Part 3 when building the spec",
+  "frames": {
+    "0000-0019": { "sec": "4-1 スキャン開始", "url": "https://natt.devinenterprise.com/org/natt-org/security/new", "proves": "通常スキャン, usagi-ecommerce selected, Devinで続行" },
+    "0020-0103": { "sec": "4-1 脅威モデル", "session": "https://natt.devinenterprise.com/org/natt-org/security/sessions/3dce88fe89a144ac8b227625484ec497", "proves": "Devin asks 5 threat-model questions (answered), writes threat_model.md" },
+    "0104-": { "sec": "4-2 指摘", "session": "https://natt.devinenterprise.com/org/natt-org/security/sessions/3dce88fe89a144ac8b227625484ec497", "proves": "Scan runs with no extra approval step; findings panel shows 40 open (critical 15, high 11, medium 8, low 6); Devin recommends fixing 26 (全 26 件を修正)" }
+  }
+}
