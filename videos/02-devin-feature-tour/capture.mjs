@@ -414,6 +414,90 @@ if (PHASE === 'secfix2') {
   console.log('LINKS', JSON.stringify(await p.evaluate(() => [...new Set([...document.querySelectorAll('a[href*="/sessions/"]')].map(a => a.innerText.trim().slice(0, 30) + '=' + a.href))].slice(0, 8))));
   await tidy(); await r.shot({ hold: 1.8, mark: 'fixstarted' });
 }
+if (PHASE === 'auto') {
+  const W = ms => sleep(ms);
+  const menuItem = async t => { const b = await p.evaluate(t => { const e = [...document.querySelectorAll('[role=menuitem],[role=option]')].find(e => e.innerText.trim() === t || e.innerText.trim().startsWith(t)); if (!e) return null; const r = e.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2, w: r.width, h: r.height }; }, t); if (!b) throw new Error('no menu item ' + t); return b; };
+  await r.goto(ORG + '/automations', 6000); await tidy();
+  await p.mouse.move(700, 300); r.cur = { x: 700, y: 300 };
+  await r.shot({ hold: 2.4, mark: 'autolist' });
+  const tpl = await r.find({ text: 'バグ報告をトリアージ', exact: false, sel: 'main a, main button' });
+  if (tpl) await r.point(tpl, { hold: 1.6, hlBox: { x: tpl.x - 20, y: tpl.y - 20, w: 360, h: 190 } });
+  const create = await r.find({ text: 'Automation を作成', exact: false, sel: 'main button' });
+  await r.click(create, { pre: { hlBox: create }, wait: 1200 });
+  await r.click(await menuItem('手動で作成'), { wait: 2500 });
+  await r.shot({ hold: 1.4, mark: 'autoform' });
+  const name = await r.box('[role=dialog] input[placeholder="Automation 名"], [role=dialog] input[aria-label="Automation 名"]');
+  await r.click(name, { wait: 300 }); await r.type(process.env.AUTO_NAME || 'Slack の不具合報告を自動調査', { every: 3 });
+  const add = await p.evaluate(() => { const d = [...document.querySelectorAll('[role=dialog]')].find(d => /Automation 作成/.test(d.innerText)); const b = [...d.querySelectorAll('button')].filter(b => b.innerText.trim() === 'トリガーを追加')[0]; const r = b.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2, w: r.width, h: r.height }; });
+  await r.click(add, { pre: { hlBox: add }, wait: 1000 });
+  await r.click(await menuItem('Slack'), { wait: 900 });
+  await r.click(await menuItem('Message'), { wait: 1800 });
+  const ch = await r.find({ text: 'チャンネルを選択', exact: false, sel: '[role=dialog] button, [role=dialog] [role=combobox]' });
+  if (!ch) throw new Error('no channel select');
+  await r.click(ch, { pre: { hlBox: ch }, wait: 1200 });
+  await r.type('usagi-bugs', { every: 2 }); await W(1500);
+  await r.click(await menuItem(process.env.AUTO_CH || 'usagi-bugs').catch(async () => menuItem('#usagi-bugs')), { wait: 1200 });
+  await closeMenus(p).catch(() => {});
+  await r.shot({ hold: 2.0, mark: 'autotrigger' });
+  const ins = await p.evaluate(() => { const d = [...document.querySelectorAll('[role=dialog]')].find(d => /Automation 作成/.test(d.innerText)); const e = d.querySelector('[contenteditable=true], textarea'); e.scrollIntoView({ block: 'center' }); const r = e.getBoundingClientRect(); return { x: r.x + 40, y: r.y + 30, w: 60, h: 30 }; });
+  await W(800);
+  await r.click(ins, { wait: 400 });
+  await r.type(process.env.AUTO_INS || '#usagi-bugs に届いた「うさぎマーケット（natt-cog/usagi-ecommerce）」の不具合報告を調査してください。報告内容を再現し、原因をコードの根拠付きで日本語でスレッドに返信してください。修正が必要な場合は修正 PR を作成し、そのリンクも返信してください。', { every: 4 });
+  await r.shot({ hold: 2.4, mark: 'autoins' });
+  console.log('FORM', (await p.evaluate(() => [...document.querySelectorAll('[role=dialog]')].find(d => /Automation 作成/.test(d.innerText)).innerText)).slice(0, 900));
+}
+if (PHASE === 'autosave') {
+  const trash = await p.evaluate(() => { const d = [...document.querySelectorAll('[role=dialog]')].find(d => /Automation 作成/.test(d.innerText)); d.scrollTop = 0; const rows = [...d.querySelectorAll('button')].filter(b => b.innerText.trim() === 'トリガーを追加').map(b => b.parentElement.closest('div')); for (const row of rows) { let el = row; for (let i = 0; i < 4 && el; i++, el = el.parentElement) { const t = el.querySelector('button[aria-label="トリガーを削除"]'); if (t && !/Message/.test(el.innerText)) { const r = t.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2, w: r.width, h: r.height }; } } } return null; });
+  console.log('TRASH', JSON.stringify(trash));
+  if (trash) { await sleep(600); await r.click(trash, { wait: 1200 }); }
+  const b = await p.evaluate(() => { const d = [...document.querySelectorAll('[role=dialog]')].find(d => /Automation 作成/.test(d.innerText)); const e = [...d.querySelectorAll('button')].find(b => b.innerText.trim() === 'Automation を作成'); const r = e.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2, w: r.width, h: r.height }; });
+  await r.click(b, { pre: { hlBox: b }, wait: 5000 });
+  await tidy(); await r.shot({ hold: 2.4, mark: 'autosaved' });
+  console.log('URL', await p.evaluate(() => location.href));
+  console.log((await main()).slice(0, 1200));
+}
+if (PHASE === 'slackpost') {
+  const CH = process.env.SLACK_CH || 'C0CLMSJATGQ';
+  await r.goto('https://app.slack.com/client/T0C3WMJB96G/' + CH, 9000);
+  await p.evaluate(() => document.querySelectorAll('[data-qa="banner"], .p-notification_bar').forEach(e => e.remove()));
+  await p.mouse.move(700, 300); r.cur = { x: 700, y: 300 };
+  await r.shot({ hold: 1.8, mark: 'slack' });
+  const ed = await r.box('[data-qa="message_input"] [contenteditable=true], .ql-editor[contenteditable=true]');
+  await r.click(ed, { wait: 400 });
+  await r.type(process.env.SLACK_MSG, { every: 4 });
+  await r.shot({ hold: 1.8, mark: 'slacktyped' });
+  await p.keyboard.press('Enter'); await sleep(2500);
+  await r.shot({ hold: 1.6, mark: 'slackposted' });
+  const t0 = Date.now();
+  await r.poll(Number(process.env.WAIT || 1500000), 8000, { cap: null, keep }, async () => {
+    const txt = await p.evaluate(() => [...document.querySelectorAll('[data-qa="virtual-list-item"]')].slice(-3).map(e => e.innerText).join('\n'));
+    return /返信|replies|reply/.test(txt) && Date.now() - t0 > 20000;
+  });
+  r.mark('slackreply');
+  console.log((await p.evaluate(() => document.querySelector('[data-qa="message_pane"], .p-message_pane')?.innerText || document.body.innerText)).slice(-1500));
+}
+if (PHASE === 'slackthread') {
+  const rep = await r.find({ text: 'repl', exact: false, sel: '[data-qa="reply_bar_count"], button, a' });
+  if (rep) await r.click(rep, { pre: { hlBox: rep }, wait: 3500 });
+  await r.shot({ hold: 2.2, mark: 'thread' });
+  const pane = () => p.evaluate(() => (document.querySelector('[data-qa="threads_flexpane"], .p-flexpane, [aria-label*="Thread"]') || document.body).innerText);
+  let last = '', same = 0;
+  await r.poll(Number(process.env.WAIT || 1800000), 10000, { cap: null, keep }, async () => {
+    const t = await pane(); same = t === last ? same + 1 : 0; last = t;
+    return (/pull\/\d+|PR\s*#?\d+|#\d+/.test(t) && same >= 2) || same >= 30;
+  });
+  r.mark('threaddone');
+  const links = await p.evaluate(() => [...new Set([...document.querySelectorAll('a[href]')].map(a => a.href).filter(h => /devinenterprise\.com\/sessions|github\.com\/.*pull/.test(h)))]);
+  console.log('LINKS', JSON.stringify(links));
+  console.log((await pane()).slice(-2500));
+}
+if (PHASE === 'threadscroll') {
+  const sc = () => p.evaluate(dy => { const els = [...document.querySelectorAll('[data-qa="threads_flexpane"] *, .p-flexpane *')].filter(e => e.scrollHeight > e.clientHeight + 40 && /auto|scroll/.test(getComputedStyle(e).overflowY)); els.sort((a, b) => b.clientHeight - a.clientHeight); const e = els[0]; if (!e) return false; const b = e.scrollTop; e.scrollTop += dy; return e.scrollTop !== b; }, 60);
+  await p.evaluate(() => { const els = [...document.querySelectorAll('[data-qa="threads_flexpane"] *, .p-flexpane *')].filter(e => e.scrollHeight > e.clientHeight + 40 && /auto|scroll/.test(getComputedStyle(e).overflowY)); els.sort((a, b) => b.clientHeight - a.clientHeight); if (els[0]) els[0].scrollTop = 0; });
+  await sleep(800); await r.shot({ hold: 2.0, mark: 'threadtop' });
+  for (let i = 0; i < 40; i++) { if (!(await sc())) break; await sleep(120); await r.shot({ kind: 'poll', scroll: true }); }
+  await sleep(600); await r.shot({ hold: 2.6, mark: 'threadend' });
+}
 if (PHASE === 'wikiask') {
   if (process.env.WIKI_URL) await r.goto(process.env.WIKI_URL, 5000);
   await wikiTidy();
