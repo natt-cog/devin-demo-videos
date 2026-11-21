@@ -1,0 +1,7 @@
+{
+  "recordedAt": "2026-11-21 (JST)",
+  "frames": {
+    "0000-0030": { "sec": "3-1 レスポンダーの作成", "url": "https://natt.devinenterprise.com/org/natt-org/oncall/ef002087455440adbc9ead78d79451b7", "proves": "Responder うさぎマーケットのアラート調査: Slack メッセージ trigger in #usagi-alerts, type アラート, Ultra" },
+    "0031-": { "sec": "3-2 アラートの調査", "url": "https://app.slack.com/client/T0C3WMJB96G/C0CKN6ZNE8M", "proves": "Test alert ([テスト用アラート]) posted in #usagi-alerts; Devin investigates and replies in thread" }
+  }
+}

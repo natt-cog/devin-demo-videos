@@ -498,6 +498,42 @@ if (PHASE === 'threadscroll') {
   for (let i = 0; i < 40; i++) { if (!(await sc())) break; await sleep(120); await r.shot({ kind: 'poll', scroll: true }); }
   await sleep(600); await r.shot({ hold: 2.6, mark: 'threadend' });
 }
+if (PHASE === 'oncall') {
+  const menuItem = async t => { const b = await p.evaluate(t => { const e = [...document.querySelectorAll('[role=menuitem],[role=option]')].find(e => e.innerText.trim() === t || e.innerText.trim().startsWith(t)); if (!e) return null; const r = e.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2, w: r.width, h: r.height }; }, t); if (!b) throw new Error('no menu item ' + t + ' / ' + (await p.evaluate(() => [...document.querySelectorAll('[role=menuitem],[role=option]')].map(e => e.innerText.trim()).join('|')))); return b; };
+  const dlg = "[...document.querySelectorAll('[role=dialog]')].find(d => /レスポンダー/.test(d.innerText) && d.querySelector('input'))";
+  await r.goto(ORG + '/oncall', 6000); await tidy();
+  await p.mouse.move(700, 300); r.cur = { x: 700, y: 300 };
+  await r.shot({ hold: 2.2, mark: 'oncall' });
+  const c = await r.find({ text: 'レスポンダーを作成', sel: 'main a, main button' });
+  await r.click(c, { pre: { hlBox: c }, wait: 3000 });
+  if (!(await p.evaluate(() => !!document.querySelector('input[placeholder="本番環境のアラート"]')))) { await p.evaluate(u => { location.href = u; }, ORG + '/oncall/create'); await sleep(7000); await tidy(); }
+  await r.shot({ hold: 1.4, mark: 'ocform' });
+  const name = await r.box('input[placeholder="本番環境のアラート"]');
+  await r.click(name, { wait: 300 }); await r.type(process.env.OC_NAME || 'うさぎマーケットのアラート調査', { every: 3 });
+  const add = await p.evaluate(new Function('return (() => { const d = ' + dlg + ' || document; const b = [...d.querySelectorAll("button")].filter(b => b.innerText.trim() === "トリガーを追加")[0]; const r = b.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2, w: r.width, h: r.height }; })()'));
+  await r.click(add, { pre: { hlBox: add }, wait: 1000 });
+  await r.click(await menuItem('Slack'), { wait: 900 });
+  console.log('SLACKMENU', await p.evaluate(() => [...document.querySelectorAll('[role=menuitem]')].map(e => e.innerText.trim()).join('|')));
+  await r.click(await menuItem(process.env.OC_EVT || 'Message'), { wait: 1800 });
+  const ch = await r.find({ text: 'チャンネルを選択', exact: false, sel: 'button, [role=combobox]' });
+  if (!ch) throw new Error('no channel select');
+  await r.click(ch, { pre: { hlBox: ch }, wait: 1200 });
+  await r.type('usagi-alerts', { every: 2 }); await sleep(1500);
+  await r.click(await menuItem('usagi-alerts').catch(() => menuItem('#usagi-alerts')), { wait: 1200 });
+  await closeMenus(p).catch(() => {});
+  const trash = await p.evaluate(() => { const rows = [...document.querySelectorAll('button')].filter(b => b.innerText.trim() === 'トリガーを追加').map(b => b.parentElement.closest('div')); for (const row of rows) { let el = row; for (let i = 0; i < 4 && el; i++, el = el.parentElement) { const t = el.querySelector('button[aria-label="トリガーを削除"]'); if (t && !/Message|メッセージ/.test(el.innerText)) { const r = t.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2, w: r.width, h: r.height }; } } } return null; });
+  console.log('TRASH', JSON.stringify(trash));
+  if (trash) await r.click(trash, { wait: 1200 });
+  await r.shot({ hold: 2.2, mark: 'octrigger' });
+  console.log('FORM', (await p.evaluate(() => document.body.innerText)).slice(0, 0) + (await p.evaluate(() => { const d = [...document.querySelectorAll('[role=dialog]')].pop(); return d ? d.innerText : ''; })).slice(0, 1500));
+}
+if (PHASE === 'ocsave') {
+  const b = await r.find({ text: 'レスポンダーを作成', sel: '[role=dialog] button' });
+  await r.click(b, { pre: { hlBox: b }, wait: 5000 });
+  await tidy(); await r.shot({ hold: 2.4, mark: 'ocsaved' });
+  console.log('URL', await p.evaluate(() => location.href));
+  console.log((await main()).slice(0, 800));
+}
 if (PHASE === 'wikiask') {
   if (process.env.WIKI_URL) await r.goto(process.env.WIKI_URL, 5000);
   await wikiTidy();

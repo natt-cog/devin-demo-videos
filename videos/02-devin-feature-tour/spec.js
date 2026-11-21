@@ -557,6 +557,494 @@ window.SPEC = {
    "cap": "ブラウザでの確認結果も PR に記録されています",
    "hold": 2.0
   },
+  "p2-0000.png": {
+   "chapter": {
+    "no": "第 2 部",
+    "title": "Automations",
+    "sub": "これから、イベントをきっかけに Devin を自動で動かす方法を説明します",
+    "short": "Automations"
+   },
+   "sec": {
+    "no": "2-1",
+    "title": "Automation の作成"
+   },
+   "cap": "Automations では、イベントをきっかけに Devin を自動で動かせます",
+   "hold": 2.2
+  },
+  "p2-0002.png": {
+   "cap": "よく使う流れはテンプレートも用意されています（例：バグ報告をトリアージ）",
+   "hold": 2.0
+  },
+  "p2-0006.png": {
+   "cap": "今回は手動で作成します"
+  },
+  "p2-0010.png": {
+   "cap": "名前を入力し、トリガーに Slack のメッセージを追加"
+  },
+  "p2-0030.png": {
+   "cap": "#usagi-bugs に投稿されたら、スレッドに返信する設定です",
+   "hold": 2.4
+  },
+  "p2-0031.png": {
+   "cap": "Devin への指示：不具合を再現し、原因と修正 PR をスレッドに返す"
+  },
+  "p2-0069.png": {
+   "cap": "トリガーと指示の設定ができました",
+   "hold": 1.8
+  },
+  "p2-0074.png": {
+   "cap": "Automation を作成しました。すぐに有効になります",
+   "hold": 2.2
+  },
+  "p2-0075.png": {
+   "sec": {
+    "no": "2-2",
+    "title": "Slack で不具合報告"
+   },
+   "cap": "Slack の #usagi-bugs に、テスト用の不具合報告を投稿します"
+  },
+  "p2-0097.png": {
+   "badge": "早送り",
+   "cap": "Automation が起動し、Devin が調査中"
+  },
+  "p2-0098.png": {
+   "badge": "早送り",
+   "cap": "Automation が起動し、Devin が調査中"
+  },
+  "p2-0099.png": {
+   "badge": "早送り",
+   "cap": "Automation が起動し、Devin が調査中"
+  },
+  "p2-0100.png": {
+   "badge": "早送り",
+   "cap": "Automation が起動し、Devin が調査中"
+  },
+  "p2-0101.png": {
+   "badge": "早送り",
+   "cap": "Automation が起動し、Devin が調査中"
+  },
+  "p2-0102.png": {
+   "badge": "",
+   "sec": {
+    "no": "2-3",
+    "title": "調査結果と修正 PR"
+   },
+   "cap": "Devin がスレッドに返信。修正 PR（usagi-ecommerce #3）も作成されています",
+   "hold": 2.8
+  },
+  "p2-0105.png": {
+   "skip": true
+  },
+  "p2-0106.png": {
+   "skip": true
+  },
+  "p2-0107.png": {
+   "skip": true
+  },
+  "p2-0108.png": {
+   "skip": true
+  },
+  "p2-0109.png": {
+   "skip": true
+  },
+  "p2-0110.png": {
+   "cap": "報告どおり再現し、合計 ¥-480 の注文が保存されることを確認",
+   "hold": 2.6
+  },
+  "p2-0111.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0112.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0113.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0114.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0115.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0116.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0117.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0118.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0119.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0120.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0121.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0122.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0123.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0124.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0125.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0126.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0127.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0128.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0129.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0130.png": {
+   "cap": "原因のコード行、修正内容、追加したテストまで報告されます"
+  },
+  "p2-0131.png": {
+   "cap": "Slack に報告するだけで、調査から修正 PR まで自動で進みます",
+   "hold": 2.8
+  },
+  "p3-0000.png": {
+   "skip": true
+  },
+  "p3-0001.png": {
+   "skip": true
+  },
+  "p3-0002.png": {
+   "skip": true
+  },
+  "p3-0003.png": {
+   "skip": true
+  },
+  "p3-0004.png": {
+   "skip": true
+  },
+  "p3-0005.png": {
+   "skip": true
+  },
+  "p3-0006.png": {
+   "skip": true
+  },
+  "p3-0007.png": {
+   "skip": true
+  },
+  "p3-0008.png": {
+   "skip": true
+  },
+  "p3-0009.png": {
+   "skip": true
+  },
+  "p3-0010.png": {
+   "skip": true
+  },
+  "p3-0011.png": {
+   "skip": true
+  },
+  "p3-0012.png": {
+   "skip": true
+  },
+  "p3-0013.png": {
+   "skip": true
+  },
+  "p3-0014.png": {
+   "skip": true
+  },
+  "p3-0015.png": {
+   "skip": true
+  },
+  "p3-0016.png": {
+   "skip": true
+  },
+  "p3-0017.png": {
+   "skip": true
+  },
+  "p3-0018.png": {
+   "skip": true
+  },
+  "p3-0019.png": {
+   "skip": true
+  },
+  "p3-0020.png": {
+   "skip": true
+  },
+  "p3-0021.png": {
+   "skip": true
+  },
+  "p3-0022.png": {
+   "skip": true
+  },
+  "p3-0023.png": {
+   "skip": true
+  },
+  "p3-0024.png": {
+   "skip": true
+  },
+  "p3-0025.png": {
+   "skip": true
+  },
+  "p3-0026.png": {
+   "skip": true
+  },
+  "p3-0027.png": {
+   "skip": true
+  },
+  "p3-0028.png": {
+   "skip": true
+  },
+  "p3-0029.png": {
+   "skip": true
+  },
+  "p3-0030.png": {
+   "skip": true
+  },
+  "p3-0031.png": {
+   "skip": true
+  },
+  "p3-0032.png": {
+   "skip": true
+  },
+  "p3-0033.png": {
+   "skip": true
+  },
+  "p3-0034.png": {
+   "skip": true
+  },
+  "p3-0035.png": {
+   "skip": true
+  },
+  "p3-0036.png": {
+   "skip": true
+  },
+  "p3-0037.png": {
+   "skip": true
+  },
+  "p3-0038.png": {
+   "skip": true
+  },
+  "p3-0039.png": {
+   "skip": true
+  },
+  "p3-0040.png": {
+   "skip": true
+  },
+  "p3-0041.png": {
+   "skip": true
+  },
+  "p3-0042.png": {
+   "skip": true
+  },
+  "p3-0043.png": {
+   "skip": true
+  },
+  "p3-0044.png": {
+   "skip": true
+  },
+  "p3-0045.png": {
+   "skip": true
+  },
+  "p3-0046.png": {
+   "skip": true
+  },
+  "p3-0047.png": {
+   "skip": true
+  },
+  "p3-0048.png": {
+   "skip": true
+  },
+  "p3-0049.png": {
+   "skip": true
+  },
+  "p3-0050.png": {
+   "skip": true
+  },
+  "p3-0051.png": {
+   "skip": true
+  },
+  "p3-0052.png": {
+   "skip": true
+  },
+  "p3-0053.png": {
+   "skip": true
+  },
+  "p3-0054.png": {
+   "skip": true
+  },
+  "p3-0055.png": {
+   "skip": true
+  },
+  "p3-0056.png": {
+   "skip": true
+  },
+  "p3-0057.png": {
+   "skip": true
+  },
+  "p3-0058.png": {
+   "skip": true
+  },
+  "p3-0059.png": {
+   "skip": true
+  },
+  "p3-0060.png": {
+   "skip": true
+  },
+  "p3-0061.png": {
+   "skip": true
+  },
+  "p3-0062.png": {
+   "skip": true
+  },
+  "p3-0063.png": {
+   "skip": true
+  },
+  "p3-0064.png": {
+   "skip": true
+  },
+  "p3-0065.png": {
+   "skip": true
+  },
+  "p3-0066.png": {
+   "skip": true
+  },
+  "p3-0067.png": {
+   "skip": true
+  },
+  "p3-0068.png": {
+   "skip": true
+  },
+  "p3-0069.png": {
+   "skip": true
+  },
+  "p3-0070.png": {
+   "skip": true
+  },
+  "p3-0071.png": {
+   "skip": true
+  },
+  "p3-0072.png": {
+   "skip": true
+  },
+  "p3-0073.png": {
+   "skip": true
+  },
+  "p3-0074.png": {
+   "skip": true
+  },
+  "p3-0075.png": {
+   "skip": true
+  },
+  "p3-0076.png": {
+   "skip": true
+  },
+  "p3-0077.png": {
+   "skip": true
+  },
+  "p3-0078.png": {
+   "skip": true
+  },
+  "p3-0079.png": {
+   "skip": true
+  },
+  "p3-0080.png": {
+   "skip": true
+  },
+  "p3-0081.png": {
+   "skip": true
+  },
+  "p3-0082.png": {
+   "skip": true
+  },
+  "p3-0083.png": {
+   "skip": true
+  },
+  "p3-0084.png": {
+   "skip": true
+  },
+  "p3-0085.png": {
+   "skip": true
+  },
+  "p3-0086.png": {
+   "skip": true
+  },
+  "p3-0087.png": {
+   "skip": true
+  },
+  "p3-0088.png": {
+   "skip": true
+  },
+  "p3-0089.png": {
+   "skip": true
+  },
+  "p3-0090.png": {
+   "skip": true
+  },
+  "p3-0091.png": {
+   "skip": true
+  },
+  "p3-0092.png": {
+   "skip": true
+  },
+  "p3-0093.png": {
+   "skip": true
+  },
+  "p3-0094.png": {
+   "skip": true
+  },
+  "p3-0095.png": {
+   "skip": true
+  },
+  "p3-0096.png": {
+   "skip": true
+  },
+  "p3-0097.png": {
+   "skip": true
+  },
+  "p3-0098.png": {
+   "skip": true
+  },
+  "p3-0099.png": {
+   "skip": true
+  },
+  "p3-0100.png": {
+   "skip": true
+  },
+  "p3-0101.png": {
+   "skip": true
+  },
+  "p3-0102.png": {
+   "skip": true
+  },
+  "p3-0103.png": {
+   "skip": true
+  },
+  "p3-0104.png": {
+   "skip": true
+  },
+  "p3-0105.png": {
+   "skip": true
+  },
+  "p3-0106.png": {
+   "skip": true
+  },
+  "p3-0107.png": {
+   "skip": true
+  },
+  "p3-0108.png": {
+   "skip": true
+  },
+  "p3-0109.png": {
+   "skip": true
+  },
   "p4-0000.png": {
    "chapter": {
     "no": "第 4 部",

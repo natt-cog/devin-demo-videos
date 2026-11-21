@@ -53,6 +53,31 @@ at(1, 188, cap='PR には、Devin Review が自動でレビューを行います
 at(1, 191, cap='今回のレビュー結果は「No Issues Found」（指摘なし）', hold=2.8)
 at(1, 222, cap='ブラウザでの確認結果も PR に記録されています', hold=2.0)
 
+# ---- 第 2 部 Automations (shots_p2) ----
+part(2, 2, 0); sec(2, 0, '2-1', 'Automation の作成')
+at(2, 0, cap='Automations では、イベントをきっかけに Devin を自動で動かせます', hold=2.2)
+at(2, 2, cap='よく使う流れはテンプレートも用意されています（例：バグ報告をトリアージ）', hold=2.0)
+at(2, 6, cap='今回は手動で作成します')
+at(2, 10, cap='名前を入力し、トリガーに Slack のメッセージを追加')
+at(2, 30, cap='#usagi-bugs に投稿されたら、スレッドに返信する設定です', hold=2.4)
+at(2, 31, cap='Devin への指示：不具合を再現し、原因と修正 PR をスレッドに返す')
+at(2, 69, cap='トリガーと指示の設定ができました', hold=1.8)
+at(2, 74, cap='Automation を作成しました。すぐに有効になります', hold=2.2)
+sec(2, 75, '2-2', 'Slack で不具合報告')
+at(2, 75, cap='Slack の #usagi-bugs に、テスト用の不具合報告を投稿します')
+ff(2, 97, 101, 'Automation が起動し、Devin が調査中')
+sec(2, 102, '2-3', '調査結果と修正 PR')
+at(2, 102, cap='Devin がスレッドに返信。修正 PR（usagi-ecommerce #3）も作成されています', hold=2.8)
+skip(2, 105, 109)
+at(2, 110, cap='報告どおり再現し、合計 ¥-480 の注文が保存されることを確認', hold=2.6)
+rng(2, 111, 130, cap='原因のコード行、修正内容、追加したテストまで報告されます')
+at(2, 131, cap='Slack に報告するだけで、調査から修正 PR まで自動で進みます', hold=2.8)
+
+# ---- 第 3 部 Devin On-call (shots_p3) ----
+P3 = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'shots_p3', 'beats.json')
+if os.path.exists(P3) and not os.environ.get('P3_READY'):
+    skip(3, 0, len(json.load(open(P3))) - 1)
+
 # ---- 第 4 部 Devin Security (shots_p4) ----
 part(4, 4, 0); sec(4, 0, '4-1', '脅威モデルとスキャン')
 at(4, 0, cap='Security から新しいスキャンを始めます', hold=2.0)
