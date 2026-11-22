@@ -72,10 +72,13 @@ function build() {
     if (t < settle) t = settle;
     // chapter: {title, sub?, no?} on a beat inserts a full-screen chapter card (UI zooms out, card, next shot zooms in) before it
     if (b.chapter) {
+      // a chapter on the very first shot follows the title card directly, so the UI is not flashed in between
+      if (!shown && !tl.chapters.length) { t = Math.max(t, INTRO + Math.round(ENTER * 0.55)); tl.introChap = true; }
       if (cap) { const need = sec(capMin(cap)); if (t - capT < need) t = capT + need; }
       const d = sec(b.chapter.hold ?? S.chapterHold ?? 3.4);
       clipRing(null, t); tl.caps.push({ t, text: '', pos: 'bottom' }); cap = undefined;
       tl.chapters.push({ ...b.chapter, t0: t, t1: t + d, prev: shown, i: tl.chapters.length }); t += d;
+      shown = null; // the shot after a card zooms in on its own, without cross-fading from the previous part's last shot
     }
     // sec: {no, title} marks a section inside a part: a lower-third label slides in and the top-right HUD updates (no extra time)
     if (b.sec) tl.secs.push({ ...b.sec, t });
@@ -241,7 +244,7 @@ async function drawUI(f, alpha) {
   ctx.save();
   ctx.translate(W / 2, H / 2); ctx.scale(cam.z * K, cam.z * K); ctx.translate(-cam.x, -cam.y);
   ctx.imageSmoothingQuality = 'high';
-  const fa = st.fade ? clamp((f - st.t0) / st.fade) : 1;
+  const fa = st.fade && st.prev ? clamp((f - st.t0) / st.fade) : 1;
   if (st.prev && fa < 1) await drawShot(st.prev, f);
   ctx.globalAlpha = fa; await drawShot(st.img, f); ctx.globalAlpha = 1;
   drawHighlights(f);
@@ -539,11 +542,11 @@ async function drawChapter(c, f) {
 }
 async function renderFrame(f) {
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
-  const I = TL.introEnd, E = TL.enter, U = TL.uiEnd, O = TL.outro;
-  if (f < I + E) {
+  const I = TL.introEnd, E = TL.enter, U = TL.uiEnd, O = TL.outro, IE = TL.introChap ? TL.chapters[0].t0 : I + E;
+  if (f < IE) {
     const out = prog(f, I - 6, I + E * 0.55);
     drawTitleCard(f, out);
-    if (f >= I - 10) {
+    if (!TL.introChap && f >= I - 10) {
       const p = eInOut(prog(f, I - 10, I + E)), rise = eOutQuint(prog(f, I - 10, I + E * 0.6));
       const s = lerp(0.8, 1, eInOut(prog(f, I + E * 0.35, I + E)));
       await drawWindow(f, s, lerp(H * 0.9, 0, rise), lerp(36, 0, p), 1 - p)();
@@ -563,7 +566,7 @@ async function renderFrame(f) {
       if (q > 0.55) { ctx.save(); ctx.globalAlpha = prog(q, 0.55, 1); drawOutro(f, p); ctx.restore(); }
     } else drawOutro(f, p);
   }
-  if (f >= I && f < U + sec(0.4) && !TL.chapters.some(c => f >= c.t0 && f < c.t1)) { ctx.save(); ctx.globalAlpha = 1 - prog(f, U, U + sec(0.4)); drawSecLabel(f); drawHud(f); drawCaption(f); drawBadge(f); ctx.restore(); }
+  if (f >= IE && f < U + sec(0.4) && !TL.chapters.some(c => f >= c.t0 && f < c.t1)) { ctx.save(); ctx.globalAlpha = 1 - prog(f, U, U + sec(0.4)); drawSecLabel(f); drawHud(f); drawCaption(f); drawBadge(f); ctx.restore(); }
 }
 
 // a subtitle chunk of more than 10 words (vo_onetake falls back to one chunk when voSay differs) is split by character share of its time
