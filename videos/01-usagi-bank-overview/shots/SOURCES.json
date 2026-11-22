@@ -1,0 +1,11 @@
+{
+  "recordedAt": "2026-11-21 (JST)",
+  "account": "Natt Org (natt.devinenterprise.com), demo account, UI language 日本語; email masked with MASK_TEXT",
+  "frames": {
+    "0000-0044": { "chapter": "解析", "session": "https://natt.devinenterprise.com/search/99a8f22e-bc57-4c52-9791-968078958166", "proves": "Ask Devin answers how UBEOD001.cbl works with line-number citations; citation opens UBEOD001.cbl:147-161" },
+    "0045-0051": { "chapter": "-", "proves": "aborted take (Agent mode repo selector), skipped in spec.js" },
+    "0052-0108": { "chapter": "移行", "session": "https://natt.devinenterprise.com/sessions/6926ea809135430382e47591621ebb18", "pr": "https://github.com/natt-cog/Usagi-Bank/pull/69", "proves": "Agent session ports UBEOD001 to Java, byte-identical to batch/cobol/expected, mvn test 51 passed at PR creation" },
+    "0109-0180": { "chapter": "テスト", "session": "https://natt.devinenterprise.com/sessions/6926ea809135430382e47591621ebb18", "proves": "Devin runs the app, imports the Java batch output, checks 口座照会 未払利息 in a browser and returns a recording (7 成功 / 0 失敗)" },
+    "0181-0188": { "chapter": "レビュー", "review": "https://natt.devinenterprise.com/review/natt-cog/usagi-bank/pull/69", "proves": "Devin Review found 4 findings on PR #69 and Devin auto-fixed all 4" }
+  }
+}

@@ -1,0 +1,180 @@
+[
+ {
+  "img": "0000.png",
+  "cur": {
+   "x": 720,
+   "y": 600
+  },
+  "hold": 2,
+  "mark": "botlive"
+ },
+ {
+  "img": "0001.png",
+  "cur": {
+   "x": 720,
+   "y": 600
+  },
+  "kind": "poll",
+  "at": 9,
+  "cap": null
+ },
+ {
+  "img": "0002.png",
+  "cur": {
+   "x": 720,
+   "y": 600
+  },
+  "kind": "poll",
+  "at": 10004,
+  "cap": null
+ },
+ {
+  "img": "0003.png",
+  "cur": {
+   "x": 720,
+   "y": 600
+  },
+  "kind": "poll",
+  "at": 20007,
+  "cap": null
+ },
+ {
+  "img": "0004.png",
+  "cur": {
+   "x": 720,
+   "y": 600
+  },
+  "kind": "poll",
+  "at": 30009,
+  "cap": null
+ },
+ {
+  "img": "0005.png",
+  "cur": {
+   "x": 720,
+   "y": 600
+  },
+  "kind": "poll",
+  "at": 40011,
+  "cap": null
+ },
+ {
+  "img": "0006.png",
+  "cur": {
+   "x": 720,
+   "y": 600
+  },
+  "kind": "poll",
+  "at": 50013,
+  "cap": null
+ },
+ {
+  "img": "0007.png",
+  "cur": {
+   "x": 720,
+   "y": 600
+  },
+  "kind": "poll",
+  "at": 60017,
+  "cap": null
+ },
+ {
+  "img": "0008.png",
+  "cur": {
+   "x": 720,
+   "y": 600
+  },
+  "kind": "poll",
+  "at": 70027,
+  "cap": null
+ },
+ {
+  "img": "0009.png",
+  "cur": {
+   "x": 720,
+   "y": 600
+  },
+  "kind": "poll",
+  "at": 80025,
+  "cap": null
+ },
+ {
+  "img": "0010.png",
+  "cur": {
+   "x": 720,
+   "y": 600
+  },
+  "kind": "poll",
+  "at": 90031,
+  "cap": null
+ },
+ {
+  "img": "0011.png",
+  "cur": {
+   "x": 720,
+   "y": 600
+  },
+  "kind": "poll",
+  "at": 100035,
+  "cap": null
+ },
+ {
+  "img": "0012.png",
+  "cur": {
+   "x": 720,
+   "y": 600
+  },
+  "kind": "poll",
+  "at": 110035,
+  "cap": null
+ },
+ {
+  "img": "0013.png",
+  "cur": {
+   "x": 720,
+   "y": 600
+  },
+  "kind": "poll",
+  "at": 120039,
+  "cap": null
+ },
+ {
+  "img": "0014.png",
+  "cur": {
+   "x": 720,
+   "y": 600
+  },
+  "kind": "poll",
+  "at": 130039,
+  "cap": null
+ },
+ {
+  "img": "0015.png",
+  "cur": {
+   "x": 720,
+   "y": 600
+  },
+  "kind": "poll",
+  "at": 140043,
+  "cap": null
+ },
+ {
+  "img": "0016.png",
+  "cur": {
+   "x": 720,
+   "y": 600
+  },
+  "kind": "poll",
+  "at": 150051,
+  "cap": null
+ },
+ {
+  "img": "0017.png",
+  "cur": {
+   "x": 720,
+   "y": 600
+  },
+  "hold": 3,
+  "mark": "botdone"
+ }
+]

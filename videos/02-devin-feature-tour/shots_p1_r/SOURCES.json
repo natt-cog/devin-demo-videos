@@ -1,0 +1,17 @@
+{
+  "recordedAt": "2026-11-22 (JST)",
+  "note": "第 2 部 Devin Review の 2-1。shots_p1 の後に merge される（p1-0223〜）",
+  "frames": {
+    "0000-0008": {
+      "sec": "2-1 PR の分析を実行",
+      "url": "https://natt.devinenterprise.com/review/natt-cog/usagi-ecommerce/pull/3",
+      "pr": "https://github.com/natt-cog/usagi-ecommerce/pull/3",
+      "proves": "「PRを分析」→「このプルリクエスト」で Devin Review をその場で実行し、ガイドビューが生成される"
+    },
+    "0009-0012": {
+      "sec": "2-1 結果",
+      "url": "https://natt.devinenterprise.com/review/natt-cog/usagi-ecommerce/pull/3",
+      "proves": "実行後にディスカッションへ「Devin Review: No Issues Found」が投稿された（指摘なし）"
+    }
+  }
+}
