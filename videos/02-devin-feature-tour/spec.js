@@ -8,6 +8,7 @@ window.SPEC = {
  "maxZoom": 1.4,
  "capArrows": false,
  "hudBar": true,
+ "capBar": true,
  "pollRunMax": 1.6,
  "chapterHold": 3.0,
  "introHold": 2.4,

@@ -242,11 +242,14 @@ async function drawShot(img, f) {
 // hudBar: the UI sits below a dark header row (part / section / fast-forward badge) so overlays never cover the product's buttons
 const BAR_BG = '#0D1526', BAR_PAD = 40;
 const barH = () => (SPEC.hudBar && TL.chapters.length ? 150 : 0);
-const barS = () => (H - barH() - BAR_PAD) / H;
+// capBar: captions sit in a fixed row along the bottom edge instead of floating over the UI
+const CAPBAR_BG = '#17223A', capBarH = () => (barH() && SPEC.capBar ? 140 : 0), topH = () => barH() + capBarH();
+const barS = () => (H - topH() - BAR_PAD) / H;
 async function drawUI(f, alpha) {
   const hb = barH(); if (!hb) return drawUIInner(f, alpha);
   const s = barS(), x0 = (W - W * s) / 2;
   ctx.save(); ctx.fillStyle = BAR_BG; ctx.fillRect(0, 0, W, H);
+  if (capBarH()) { const cy0 = H - capBarH(); ctx.fillStyle = CAPBAR_BG; ctx.fillRect(0, cy0, W, capBarH()); ctx.fillStyle = 'rgba(255,255,255,.08)'; ctx.fillRect(0, cy0, W, 2); }
   ctx.translate(x0, hb); ctx.scale(s, s); rr(0, 0, W, H, 26 / s); ctx.clip(); ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
   await drawUIInner(f, alpha); ctx.restore();
 }
@@ -415,7 +418,23 @@ async function placeCaptions() {
     c.ax = a.x;
   }
 }
+function drawCapBar(f) {
+  const k = lastBefore(TL.caps, f); if (!k) return;
+  const bk = lastBefore(TL.badges, f); let res = 0;
+  if (bk && bk.text) { font(40, 600); res = ctx.measureText(bk.text).width + 130 + 60; }
+  const idx = TL.caps.indexOf(k), prev = TL.caps[idx - 1], y = H - capBarH() / 2 + 2, maxW = W * barS() - 80 - res * 2;
+  const draw = (c, a) => {
+    if (!c || !c.text || a <= 0) return;
+    let fs = 58; font(fs, 500); while (spacedW(c.text, -0.5) > maxW && fs > 40) font(--fs, 500);
+    ctx.save(); ctx.globalAlpha *= a; ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle';
+    spaced(c.text, W / 2 - spacedW(c.text, -0.5) / 2, y, -0.5); ctx.restore();
+  };
+  const t = prog(f, k.t, k.t + 10);
+  if (prev && prev.text && t < 1) draw(prev, 1 - t);
+  draw(k, t);
+}
 function drawCaption(f) {
+  if (capBarH()) return drawCapBar(f);
   const k = lastBefore(TL.caps, f); if (!k) return;
   const idx = TL.caps.indexOf(k), prev = TL.caps[idx - 1];
   const draw = (c, a, dy) => {
@@ -445,7 +464,7 @@ function drawCaption(f) {
 function drawBadge(f) {
   const k = lastBefore(TL.badges, f); if (!k || !k.text) return;
   const a = eOut(prog(f, k.t, k.t + 16));
-  font(40, 600); const tw = ctx.measureText(k.text).width; const w = tw + 130, h = 88, x = barH() ? (TL.hudEnd ?? 0) + 60 : W - 90 - w, y = barH() ? barH() / 2 + 4 - 44 : SPEC.hud !== false && TL.chapters.length && hudState(f).c ? 200 : 90;
+  font(40, 600); const tw = ctx.measureText(k.text).width; const w = tw + 130, h = 88, x = capBarH() ? W - (W - W * barS()) / 2 - w : barH() ? (TL.hudEnd ?? 0) + 60 : W - 90 - w, y = capBarH() ? H - capBarH() / 2 - 44 : barH() ? barH() / 2 + 4 - 44 : SPEC.hud !== false && TL.chapters.length && hudState(f).c ? 200 : 90;
   ctx.save(); ctx.globalAlpha = a; rr(x, y, w, h, 44); ctx.fillStyle = DARK ? 'rgba(44,44,46,.94)' : 'rgba(25,25,25,.9)'; ctx.fill();
   if (DARK) { rr(x + 1, y + 1, w - 2, h - 2, 43); ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(255,255,255,.14)'; ctx.stroke(); }
   ctx.fillStyle = '#fff'; // fast-forward glyph
@@ -476,8 +495,13 @@ function drawHudBar(f) {
     font(50, 500); ctx.fillStyle = `rgba(255,255,255,${0.86 * k})`; cx += spaced((s.no ? s.no + '　' : '') + s.title, cx, cy + 2 + 10 * (1 - k), 0.5);
   }
   TL.hudEnd = cx;
-  const all = TL.chapters; font(36, 500); const items = all.map(x => x.short || x.title), gap = 64;
-  const iw = items.map(t => spacedW(t, 0.5)); let rx = W - x0 - iw.reduce((q, w) => q + w, 0) - gap * (items.length - 1);
+  const all = TL.chapters, items = all.map(x => x.short || x.title), hdrEnd = capBarH() ? cx : Math.max(cx, (TL.badgeEnd ?? 0));
+  let fs = 36, gap = 64, iw, rx;
+  for (;;) {
+    font(fs, 500); iw = items.map(t => spacedW(t, 0.5)); rx = W - x0 - iw.reduce((q, w) => q + w, 0) - gap * (items.length - 1);
+    if (rx >= hdrEnd + 60 || fs <= 26) break; fs -= 2; gap = Math.round(fs * 1.6);
+  }
+  if (rx < hdrEnd + 60) { ctx.textBaseline = 'alphabetic'; ctx.restore(); return; }
   items.forEach((t, j) => {
     const on = j === c.i; ctx.fillStyle = on ? '#fff' : `rgba(255,255,255,${j < c.i ? 0.5 : 0.32})`;
     spaced(t, rx, cy + 2, 0.5); if (on) { ctx.fillStyle = 'rgba(32,120,255,1)'; rr(rx, cy + 34, iw[j], 6, 3); ctx.fill(); }
@@ -516,6 +540,7 @@ function drawHud(f) {
 }
 // Lower-third: section number and title slide in from the left for ~2 s when a section starts.
 function drawSecLabel(f) {
+  if (capBarH()) return;
   const s = lastBefore(TL.secs, f); if (!s) return;
   const D = sec(s.hold ?? SPEC.secHold ?? 2.2), e = f - s.t; if (e > D) return;
   const a = eOutQuint(prog(f, s.t, s.t + sec(0.5))) * (1 - eInOut(prog(f, s.t + D - sec(0.4), s.t + D)));

@@ -189,7 +189,7 @@ spec = {
     'title': 'Devin 機能紹介', 'subtitle': '基本的な使い方・Review・Automations・On-call・Security・Apps・Bots',
     'outro': 'Devin で、開発から運用・セキュリティまで', 'outroSub': 'docs.devin.ai',
     'speed': 4, 'cps': 48, 'maxZoom': 1.4, 'capArrows': False,
-    'hudBar': True, 'pollRunMax': 1.6,
+    'hudBar': True, 'capBar': True, 'pollRunMax': 1.6,
     'chapterHold': 3.0, 'introHold': 2.4, 'edit': E,
 }
 open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'spec.js'), 'w').write('window.SPEC = ' + json.dumps(spec, ensure_ascii=False, indent=1) + ';\n')
