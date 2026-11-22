@@ -363,6 +363,109 @@ if (PHASE === 'rv3disc') {
   await sleep(1800); await p.mouse.move(1200, 250); r.cur = { x: 1200, y: 250 };
   await r.shot({ hold: 2.8, mark: 'rv3none' });
 }
+const APP_PROMPT = process.env.APP_PROMPT || 'natt-cog/usagi-ecommerce の商品データと注文データを使って、社内向けの売上ダッシュボードを日本語で作ってください。日別の売上グラフ、売れている商品のランキング、最近の注文一覧を表示し、商品名で絞り込めるようにしてください。データはリポジトリの初期データを使ってください。';
+if (PHASE === 'app1') {
+  await r.goto(ORG + '/apps', 6000); await tidy();
+  await p.mouse.move(900, 300); r.cur = { x: 900, y: 300 };
+  await r.shot({ hold: 2.2, mark: 'apps' });
+  const nb = await r.find({ text: 'アプリを作成', sel: 'main a, main button, a' });
+  await r.click(nb, { pre: { hlBox: nb }, wait: 4000 }); await tidy();
+  await r.shot({ hold: 2.0, mark: 'appnew' });
+  await r.click(await boxOf('main [contenteditable=true]'), { wait: 400 });
+  await sendPrompt(APP_PROMPT, 'appasked');
+  await sleep(8000); await tidy();
+  await r.shot({ hold: 1.6, mark: 'appsession' });
+  console.log('URL', await p.evaluate(() => location.href)); console.log((await main()).replace(/\n+/g, ' | ').slice(0, 1500));
+}
+if (PHASE === 'bot1') {
+  await r.goto(ORG + '/bots', 6000);
+  await p.mouse.move(900, 500); r.cur = { x: 900, y: 500 };
+  await r.shot({ hold: 2.0, mark: 'botlist' });
+  const nb = await r.find({ text: 'Botを作成', sel: 'main button, main a' });
+  if (nb) { await r.click(nb, { pre: { hlBox: nb }, wait: 3500 }); await r.shot({ hold: 2.0, mark: 'botgoal' }); }
+  const vis = t => p.evaluate(t => [...document.querySelectorAll('button')].some(x => x.innerText.trim() === t && x.getBoundingClientRect().width > 0), t);
+  const qa = await r.find({ text: 'QA Engineer', exact: false, sel: 'button, a, [role=button]' });
+  if (qa) { await r.click(qa, { pre: { hlBox: qa }, wait: 3000 }); await r.shot({ hold: 2.0, mark: 'botqa' }); }
+  for (let i = 0; i < 8 && !(await vis('作成')); i++) {
+    const nx = (await r.find({ text: '続ける', sel: 'button' })) || (await r.find({ text: '続行', sel: 'button' }));
+    if (!nx) break;
+    await r.click(nx, { pre: { hlBox: nx }, wait: 2200 }); await r.shot({ hold: 2.0 });
+  }
+  console.log('STATE', (await p.evaluate(() => document.body.innerText)).replace(/\n+/g, ' | ').slice(0, 600));
+  await r.shot({ hold: 2.4, mark: 'botcustom' });
+  const mk = await r.find({ text: '作成', sel: '[role=dialog] button, button' });
+  if (!mk) throw new Error('no create');
+  await r.click(mk, { pre: { hlBox: mk }, wait: 6000 }); await tidy();
+  await r.shot({ hold: 2.2, mark: 'botcreated' });
+  console.log('URL', await p.evaluate(() => location.href)); console.log((await p.evaluate(() => document.body.innerText)).replace(/\n+/g, ' | ').slice(0, 1200));
+}
+const APP_SESSION = 'https://natt.devinenterprise.com/sessions/cb2a244a2bc24234b2bd35b07b1d51ed';
+if (PHASE === 'app2') {
+  await r.goto(APP_SESSION, 6000); await tidy(); await scrollChat();
+  await r.shot({ hold: 3.0, mark: 'appdone' });
+  await r.click(await boxOf('main [contenteditable=true]'), { wait: 400 });
+  await sendPrompt(process.env.APP_FOLLOW || 'グラフの推移が分かるように、デモ用のサンプル注文を過去 30 日分追加して、アプリを更新してください。', 'appfollow');
+  let same = 0, last = '';
+  await r.poll(Number(process.env.WAIT || 1800000), 10000, { cap: null }, async () => { await scrollChat(); const t = await main(); same = t === last ? same + 1 : 0; last = t; return /指示を待っています/.test(t.slice(-400)) && same >= 2; });
+  await sleep(3000); await tidy(); await scrollChat();
+  await r.shot({ hold: 2.6, mark: 'appupdated' });
+  console.log((await main()).replace(/\n+/g, ' | ').slice(-1500));
+  console.log('LINKS', await p.evaluate(() => [...document.querySelectorAll('main a')].map(a => a.innerText.trim().slice(0, 30) + ' -> ' + a.href).filter(x => /devinapps|apps\//.test(x)).join(' || ')));
+}
+const APP_URL = 'https://usagi-analytics--cx2zn5lz.preview.devinapps.com/';
+if (PHASE === 'app3') {
+  await r.goto(ORG + '/apps', 6000); await tidy();
+  await p.mouse.move(900, 300); r.cur = { x: 900, y: 300 };
+  await r.shot({ hold: 2.4, mark: 'applist' });
+  await r.goto(APP_URL, 7000);
+  await r.shot({ hold: 3.0, mark: 'appopen' });
+  const q = await boxOf('input[type=search], input[type=text], input');
+  if (!q) throw new Error('no search input');
+  await r.click(q, { pre: { hlBox: q }, wait: 400 });
+  await r.type(process.env.APP_Q || 'にんじん', { every: 2 });
+  await p.keyboard.press('Escape'); await sleep(500);
+  const go = await r.find({ text: '絞り込む', sel: 'button' });
+  if (!go) throw new Error('no filter button');
+  await r.click(go, { pre: { hlBox: go }, wait: 3000 });
+  await r.shot({ hold: 3.0, mark: 'appfilter' });
+  console.log((await p.evaluate(() => document.body.innerText)).replace(/\n+/g, ' | ').slice(0, 1500));
+}
+const BOT_URL = ORG + '/bots/be2fac0f104e46fb889581f1b1330974';
+if (PHASE === 'bot2') {
+  await r.goto(BOT_URL, 6000); await tidy();
+  await p.evaluate(() => { const e = document.querySelector('main [contenteditable=true]'); e.focus(); getSelection().selectAllChildren(e); });
+  await p.keyboard.press('Backspace'); await sleep(800);
+  await r.shot({ hold: 2.4, mark: 'botpage' });
+  await r.click(await boxOf('main [contenteditable=true]'), { wait: 400 });
+  await sendPrompt(process.env.BOT_TASK || 'natt-cog/usagi-ecommerce の PR #3（カートの数量にマイナスを入れられる不具合の修正）を、実際のブラウザで動作確認してください。結果と録画を PR にコメントで投稿してください。', 'bottask');
+  let same = 0, last = '', t0 = Date.now();
+  await r.poll(Number(process.env.WAIT || 3600000), 10000, { cap: null }, async () => { await scrollChat(); const t = await main(); same = t === last ? same + 1 : 0; last = t; if (Date.now() - t0 > 300000) { t0 = Date.now(); console.log('still', new Date().toISOString(), t.slice(-300).replace(/\n/g, ' ')); } return /に機能の構築、バグの修正/.test(t.slice(-300)) && same >= 3; });
+  await sleep(3000); await tidy(); await scrollChat();
+  await r.shot({ hold: 2.6, mark: 'botdone' });
+  console.log((await main()).replace(/\n+/g, ' | ').slice(-2500));
+}
+if (PHASE === 'bot3') {
+  await r.goto(BOT_URL, 6000); await tidy(); await scrollChat();
+  await r.shot({ hold: 2.0, mark: 'botlive' });
+  let same = 0, last = '', t0 = Date.now();
+  await r.poll(Number(process.env.WAIT || 3600000), 10000, { cap: null }, async () => { await scrollChat(); const t = await main(); same = t === last ? same + 1 : 0; last = t; if (Date.now() - t0 > 300000) { t0 = Date.now(); console.log('still', new Date().toISOString(), t.slice(-300).replace(/\n/g, ' ')); } return !/入力中/.test(t) && same >= 3; });
+  await sleep(3000); await tidy(); await scrollChat();
+  await r.shot({ hold: 3.0, mark: 'botdone' });
+  console.log((await main()).replace(/\n+/g, ' | ').slice(-2500));
+}
+if (PHASE === 'bot4') {
+  await r.goto('https://natt.devinenterprise.com/review/natt-cog/usagi-ecommerce/pull/3', 7000); await tidy();
+  await p.mouse.move(1000, 300); r.cur = { x: 1000, y: 300 };
+  await r.shot({ hold: 1.0 });
+  const tab = await r.find({ text: 'ディスカッション', exact: false, sel: 'main button, main [role=tab]' });
+  await r.click(tab, { pre: { hlBox: tab }, wait: 3000 });
+  const found = await p.evaluate(() => { const els = [...document.querySelectorAll('main p, main li, main div')].filter(x => /(-1|マイナス|negative)/i.test(x.innerText) && /(QA|ブラウザ|browser|録画|recording)/i.test(x.innerText) && x.innerText.length < 1500); const e = els.pop(); if (e) { e.scrollIntoView({ block: 'start' }); return e.innerText.slice(0, 400); } return null; });
+  console.log('FOUND', found);
+  await sleep(1800); await p.mouse.move(1200, 250); r.cur = { x: 1200, y: 250 };
+  await r.shot({ hold: 3.0, mark: 'botcomment' });
+  await p.evaluate(() => window.scrollBy(0, 0));
+  console.log((await main()).replace(/\n+/g, ' | ').slice(-2500));
+}
 if (PHASE === 'sec1') {
   await r.goto(ORG + '/security/new', 6000); await tidy();
   await p.mouse.move(700, 250); r.cur = { x: 700, y: 250 };

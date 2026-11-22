@@ -15,6 +15,8 @@ PARTS = [
     ('第 3 部', 'Automations', 'これから、イベントをきっかけに Devin を自動で動かす方法を説明します'),
     ('第 4 部', 'Devin On-call', 'これから、アラートを Devin に調査させる方法を説明します'),
     ('第 5 部', 'Devin Security', 'これから、脆弱性の検出と修正を説明します'),
+    ('第 6 部', 'Devin Apps', 'これから、Devin に社内向けアプリを作ってもらう方法を説明します'),
+    ('第 7 部', 'Devin Bots', 'これから、役割を持った Bot に仕事を任せる方法を説明します'),
 ]
 def part(n, p, i):
     no, title, sub = PARTS[n - 1]
@@ -137,6 +139,43 @@ at(4, 158, cap='修正用のセッションが始まりました')
 ff(4, 159, 173, 'Devin が修正し、回帰テストを追加中')
 at(4, 174, cap='SQL をプレースホルダ化して PR を作成。CI も成功しました', hold=3.0)
 
+# ---- 第 6 部 Devin Apps (shots_p5: 依頼, shots_p5_b: 追加の依頼, shots_p5_c: アプリを使う) ----
+part(6, 5, 0); sec(5, 0, '6-1', 'アプリを依頼')
+at(5, 0, cap='Devin Apps では、社内向けの Web アプリを Devin に作ってもらい、チームで共有できます', hold=2.6)
+at(5, 3, cap='「アプリを作成」に、作りたいアプリを日本語で書きます', hold=2.2)
+at(5, 6, cap='usagi-ecommerce の商品と注文データで、売上ダッシュボードを依頼します', hold=2.6)
+at(5, 9, cap='Devin がリポジトリの初期データを確認して、アプリを作り始めます', hold=2.0)
+sec(5, 10, '6-2', '公開と更新')
+at(5, 10, cap='約 2 分でアプリが公開されました。初期データの注文は 2 件だけだと報告しています', hold=3.0)
+at(5, 13, cap='推移が見えるよう、デモ用のサンプル注文を足すよう追加で依頼します', hold=2.4)
+ff(5, 14, 28, 'Devin がアプリを更新中')
+at(5, 29, cap='過去 30 日分のデモ注文（115 件）を追加し、アプリを v2 に更新しました', hold=2.8)
+sec(5, 30, '6-3', 'アプリを使う')
+at(5, 30, cap='作ったアプリは Apps の一覧に並び、組織のメンバーが開けます', hold=2.4)
+at(5, 31, cap='共有 URL で開くと、売上・注文数・日別の売上グラフが表示されます', hold=3.0)
+at(5, 33, cap='商品名で絞り込んでみます')
+at(5, 38, cap='「にんじん」を含む商品だけの集計に切り替わりました', hold=3.0)
+
+# ---- 第 7 部 Devin Bots (shots_p6: 作成, shots_p6_b: 依頼, shots_p6_c: 確認中〜完了, shots_p6_d: PR のコメント) ----
+part(7, 6, 0); sec(6, 0, '7-1', 'Bot を作る')
+at(6, 0, cap='Devin Bots は、役割と目標を持ち、仕事を最後まで進める Devin です', hold=2.6)
+at(6, 3, cap='「Botを作成」から、ゼロからでもテンプレートからでも作れます', hold=2.6)
+at(6, 6, cap='テンプレート「QA Engineer」を選びます。PR をブラウザでテストして報告する役割です', hold=3.0)
+at(6, 10, cap='名前とアイコンを決めて「作成」します', hold=2.4)
+at(6, 13, cap='Bot が自己紹介し、任せられる仕事を提案します', hold=2.6)
+sec(6, 14, '7-2', '仕事を任せる')
+at(6, 17, cap='第 3 部で作られた PR #3 を、ブラウザで動作確認するよう依頼します', hold=2.8)
+ff(6, 20, 29, 'Bot がセッションを開始')
+at(6, 30, cap='Bot は自分でセッションを開始し、確認中の画面をチャットで見せます', hold=2.8)
+skip(6, 31, 31)
+ff(6, 32, 42, 'Bot がブラウザで動作確認中')
+at(6, 43, cap='結果は「すべて合格」。マイナスの数量も、書き換えた Cookie での注文も 400 で弾かれました', hold=3.6)
+skip(6, 44, 47)
+at(6, 48, cap='さらに、新しい PR が来るたびに同じ確認を自動で回すことも提案しています', hold=2.6)
+sec(6, 49, '7-3', 'PR への報告')
+at(6, 49, cap='PR のディスカッションを開きます')
+at(6, 52, cap='確認結果の表と録画が、PR にコメントされています', hold=3.6)
+
 # a badge reset that lands on a skipped beat would never show: move it to the next kept beat
 _order = [b['img'] for b in json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'shots', 'beats.json')))]
 for i, key in enumerate(_order):
@@ -147,7 +186,7 @@ for i, key in enumerate(_order):
         if nxt: E.setdefault(nxt, {}).setdefault('badge', '')
 
 spec = {
-    'title': 'Devin 機能紹介', 'subtitle': '基本的な使い方・Review・Automations・On-call・Security',
+    'title': 'Devin 機能紹介', 'subtitle': '基本的な使い方・Review・Automations・On-call・Security・Apps・Bots',
     'outro': 'Devin で、開発から運用・セキュリティまで', 'outroSub': 'docs.devin.ai',
     'speed': 4, 'cps': 48, 'maxZoom': 1.4, 'capArrows': False,
     'hudBar': True, 'pollRunMax': 1.6,

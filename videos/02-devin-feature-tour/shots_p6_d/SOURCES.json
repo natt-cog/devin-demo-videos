@@ -1,0 +1,11 @@
+{
+ "recordedAt": "2026-11-22 (JST)",
+ "note": "第 7 部 7-3",
+ "frames": {
+  "0000-0003": {
+   "url": "https://natt.devinenterprise.com/review/natt-cog/usagi-ecommerce/pull/3",
+   "pr": "https://github.com/natt-cog/usagi-ecommerce/pull/3",
+   "proves": "PR #3 に「ブラウザ動作確認結果（4e6f089）: すべて合格」の表と録画がコメントされた"
+  }
+ }
+}

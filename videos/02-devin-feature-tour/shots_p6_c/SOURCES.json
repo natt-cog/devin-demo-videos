@@ -1,0 +1,11 @@
+{
+ "recordedAt": "2026-11-22 (JST)",
+ "note": "第 7 部 7-2",
+ "frames": {
+  "0000-0017": {
+   "url": "https://natt.devinenterprise.com/org/natt-org/bots/be2fac0f104e46fb889581f1b1330974",
+   "pr": "https://github.com/natt-cog/usagi-ecommerce/pull/3",
+   "proves": "「PR #3 はブラウザ確認ですべて合格」。数量 -1・0・abc と改変 Cookie の注文確定が 400 で拒否された"
+  }
+ }
+}

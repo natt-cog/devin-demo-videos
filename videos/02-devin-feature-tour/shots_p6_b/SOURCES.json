@@ -1,0 +1,11 @@
+{
+ "recordedAt": "2026-11-22 (JST)",
+ "note": "第 7 部 7-2",
+ "frames": {
+  "0000-0016": {
+   "url": "https://natt.devinenterprise.com/org/natt-org/bots/be2fac0f104e46fb889581f1b1330974",
+   "session": "https://natt.devinenterprise.com/sessions/a0800b435ead4f5dbb64834645a9ff59",
+   "proves": "PR #3 の動作確認を依頼すると Bot がセッションを開始し、チャットにセッションの画面を表示"
+  }
+ }
+}
