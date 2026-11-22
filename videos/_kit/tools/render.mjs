@@ -40,6 +40,7 @@ async function openPage() {
 const first = await openPage();
 const total = await first.evaluate(() => window.film.frames);
 fs.mkdirSync(path.join(ROOT, VIDEO, 'build'), { recursive: true });
+if (args.includes('--timeline')) { console.log(JSON.stringify(await first.evaluate(() => { const T = window.film.timeline(); return { chapters: T.chapters.map(c => [c.no, c.t0, c.t1]), secs: T.secs.map(x => [x.no, x.t]), badges: T.badges.filter(b => b.text).map(b => b.t) }; }))); await browser.close(); server.close(); process.exit(0); }
 if (args.includes('--count')) { const late = await first.evaluate(() => window.film.cues().voLate); if (late && late.length) console.error('narration waits on visuals:', late.join(', ')); console.log(total); process.exit(0); }
 fs.writeFileSync(path.join(ROOT, VIDEO, 'build', 'cues.json'), JSON.stringify(await first.evaluate(() => window.film.cues()), null, 1));
 const list = flag('--frames', null);

@@ -1,12 +1,13 @@
 window.SPEC = {
  "title": "Devin 機能紹介",
- "subtitle": "基本的な使い方・Automations・On-call・Security",
+ "subtitle": "基本的な使い方・Review・Automations・On-call・Security",
  "outro": "Devin で、開発から運用・セキュリティまで",
  "outroSub": "docs.devin.ai",
  "speed": 4,
  "cps": 48,
  "maxZoom": 1.4,
  "capArrows": false,
+ "hudBar": true,
  "pollRunMax": 1.6,
  "chapterHold": 3.0,
  "introHold": 2.4,
@@ -557,15 +558,68 @@ window.SPEC = {
    "cap": "ブラウザでの確認結果も PR に記録されています",
    "hold": 2.0
   },
-  "p2-0000.png": {
+  "p1-0223.png": {
    "chapter": {
     "no": "第 2 部",
+    "title": "Devin Review",
+    "sub": "これから、Devin Review が PR のバグや問題を見つける様子を説明します",
+    "short": "Devin Review"
+   },
+   "sec": {
+    "no": "2-1",
+    "title": "PR の分析を実行"
+   },
+   "cap": "Devin Review は、PR のバグや設計上の問題、セキュリティの問題を見つけます",
+   "hold": 2.6
+  },
+  "p1-0225.png": {
+   "cap": "「PRを分析」から、この PR の分析をその場で実行します"
+  },
+  "p1-0228.png": {
+   "cap": "分析が始まり、変更点を順に読めるガイドビューが表示されます",
+   "hold": 2.0
+  },
+  "p1-0231.png": {
+   "skip": true
+  },
+  "p1-0235.png": {
+   "cap": "この PR では、バグや問題は見つかりませんでした（No Issues Found）",
+   "hold": 2.8
+  },
+  "p1-0236.png": {
+   "sec": {
+    "no": "2-2",
+    "title": "見つかった不具合と自動修正"
+   },
+   "cap": "こちらは、COBOL を Java に移行した PR（Usagi-Bank #69）です",
+   "hold": 2.4
+  },
+  "p1-0239.png": {
+   "cap": "Devin Review が 4 件の指摘を見つけ、Devin が 4 件とも自動で修正しました",
+   "hold": 3.0
+  },
+  "p1-0242.png": {
+   "cap": "入力ファイルを読めないときにエラーコードが返らない不具合など、指摘と修正内容が並びます",
+   "hold": 5.0
+  },
+  "p1-0243.png": {
+   "skip": true
+  },
+  "p1-0244.png": {
+   "skip": true
+  },
+  "p1-0245.png": {
+   "skip": true
+  },
+  "p2-0000.png": {
+   "chapter": {
+    "no": "第 3 部",
     "title": "Automations",
     "sub": "これから、イベントをきっかけに Devin を自動で動かす方法を説明します",
     "short": "Automations"
    },
    "sec": {
-    "no": "2-1",
+    "no": "3-1",
     "title": "Automation の作成"
    },
    "cap": "Automations では、イベントをきっかけに Devin を自動で動かせます",
@@ -598,7 +652,7 @@ window.SPEC = {
   },
   "p2-0075.png": {
    "sec": {
-    "no": "2-2",
+    "no": "3-2",
     "title": "Slack で不具合報告"
    },
    "cap": "Slack の #usagi-bugs に、テスト用の不具合報告を投稿します"
@@ -626,7 +680,7 @@ window.SPEC = {
   "p2-0102.png": {
    "badge": "",
    "sec": {
-    "no": "2-3",
+    "no": "3-3",
     "title": "調査結果と修正 PR"
    },
    "cap": "Devin がスレッドに返信。修正 PR（usagi-ecommerce #3）も作成されています",
@@ -717,13 +771,13 @@ window.SPEC = {
   },
   "p3-0000.png": {
    "chapter": {
-    "no": "第 3 部",
+    "no": "第 4 部",
     "title": "Devin On-call",
     "sub": "これから、アラートを Devin に調査させる方法を説明します",
     "short": "Devin On-call"
    },
    "sec": {
-    "no": "3-1",
+    "no": "4-1",
     "title": "レスポンダーの作成"
    },
    "cap": "Devin On-call は、アラートやバグ報告を Devin が自動で調査する機能です",
@@ -742,7 +796,7 @@ window.SPEC = {
   },
   "p3-0031.png": {
    "sec": {
-    "no": "3-2",
+    "no": "4-2",
     "title": "アラートの調査"
    },
    "cap": "#usagi-alerts に、テスト用のアラートを投稿します"
@@ -1009,7 +1063,7 @@ window.SPEC = {
   },
   "p3-0137.png": {
    "sec": {
-    "no": "3-3",
+    "no": "4-3",
     "title": "グループ化とイシュー"
    },
    "cap": "同じアラートを、もう一度投稿します"
@@ -1077,7 +1131,7 @@ window.SPEC = {
   },
   "p3-0183.png": {
    "sec": {
-    "no": "3-4",
+    "no": "4-4",
     "title": "レポート"
    },
    "cap": "調査の内容は、定期レポートにまとめて Slack に送れます"
@@ -1088,13 +1142,13 @@ window.SPEC = {
   },
   "p4-0000.png": {
    "chapter": {
-    "no": "第 4 部",
+    "no": "第 5 部",
     "title": "Devin Security",
     "sub": "これから、脆弱性の検出と修正を説明します",
     "short": "Devin Security"
    },
    "sec": {
-    "no": "4-1",
+    "no": "5-1",
     "title": "脅威モデルとスキャン"
    },
    "cap": "Security から新しいスキャンを始めます",
@@ -1395,7 +1449,7 @@ window.SPEC = {
   },
   "p4-0146.png": {
    "sec": {
-    "no": "4-2",
+    "no": "5-2",
     "title": "指摘の確認"
    },
    "cap": "見つかった指摘は 15 件。重大度ごとに一覧で確認できます",
@@ -1411,7 +1465,7 @@ window.SPEC = {
   },
   "p4-0153.png": {
    "sec": {
-    "no": "4-3",
+    "no": "5-3",
     "title": "Devinで修正"
    },
    "cap": "「Devinで修正」から、修正を Devin に任せます"

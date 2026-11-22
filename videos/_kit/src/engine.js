@@ -239,7 +239,18 @@ async function drawShot(img, f) {
   window.SCENES[sc.name](ctx, (f - sc.t0) / FPS, { VW, VH, INK, BG, DARK, AVATAR, LOCKUP, font, rr, spaced, spacedW, clamp, lerp, prog, eOut, eInOut, eOutQuint, alpha: a });
   ctx.restore();
 }
+// hudBar: the UI sits below a dark header row (part / section / fast-forward badge) so overlays never cover the product's buttons
+const BAR_BG = '#0D1526', BAR_PAD = 40;
+const barH = () => (SPEC.hudBar && TL.chapters.length ? 150 : 0);
+const barS = () => (H - barH() - BAR_PAD) / H;
 async function drawUI(f, alpha) {
+  const hb = barH(); if (!hb) return drawUIInner(f, alpha);
+  const s = barS(), x0 = (W - W * s) / 2;
+  ctx.save(); ctx.fillStyle = BAR_BG; ctx.fillRect(0, 0, W, H);
+  ctx.translate(x0, hb); ctx.scale(s, s); rr(0, 0, W, H, 26 / s); ctx.clip(); ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
+  await drawUIInner(f, alpha); ctx.restore();
+}
+async function drawUIInner(f, alpha) {
   const st = stepAt(f); const cam = camAt(f);
   ctx.save();
   ctx.translate(W / 2, H / 2); ctx.scale(cam.z * K, cam.z * K); ctx.translate(-cam.x, -cam.y);
@@ -434,7 +445,7 @@ function drawCaption(f) {
 function drawBadge(f) {
   const k = lastBefore(TL.badges, f); if (!k || !k.text) return;
   const a = eOut(prog(f, k.t, k.t + 16));
-  font(40, 600); const tw = ctx.measureText(k.text).width; const w = tw + 130, h = 88, x = W - 90 - w, y = SPEC.hud !== false && TL.chapters.length && hudState(f).c ? 200 : 90;
+  font(40, 600); const tw = ctx.measureText(k.text).width; const w = tw + 130, h = 88, x = barH() ? (TL.hudEnd ?? 0) + 60 : W - 90 - w, y = barH() ? barH() / 2 + 4 - 44 : SPEC.hud !== false && TL.chapters.length && hudState(f).c ? 200 : 90;
   ctx.save(); ctx.globalAlpha = a; rr(x, y, w, h, 44); ctx.fillStyle = DARK ? 'rgba(44,44,46,.94)' : 'rgba(25,25,25,.9)'; ctx.fill();
   if (DARK) { rr(x + 1, y + 1, w - 2, h - 2, 43); ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(255,255,255,.14)'; ctx.stroke(); }
   ctx.fillStyle = '#fff'; // fast-forward glyph
@@ -447,8 +458,36 @@ function hudState(f) {
   const c = lastBefore(TL.chapters.map(x => ({ ...x, t: x.t0 })), f), s = lastBefore(TL.secs, f);
   return { c, s: s && c && s.t >= c.t0 ? s : null };
 }
+function drawHudBar(f) {
+  const hb = barH(), x0 = (W - W * barS()) / 2, cy = hb / 2 + 4; TL.hudEnd = x0;
+  const { c, s } = hudState(f); if (!c) return;
+  const a = eOut(prog(f, c.t1, c.t1 + sec(0.6))); if (a <= 0) return;
+  ctx.save(); ctx.globalAlpha = a; ctx.textBaseline = 'middle';
+  const lh = 50, lw = lh * LOCKUP.width / LOCKUP.height; let cx = x0;
+  ctx.drawImage(LOCKUP, cx, cy - lh / 2 - 4, lw, lh); cx += lw + 44;
+  ctx.fillStyle = 'rgba(255,255,255,.22)'; ctx.fillRect(cx, cy - 34, 3, 68); cx += 44;
+  const pill = `第 ${c.i + 1} 部`; font(40, 600); const pw = spacedW(pill, 1) + 56;
+  rr(cx, cy - 34, pw, 68, 34); ctx.fillStyle = 'rgba(32,120,255,1)'; ctx.fill();
+  ctx.fillStyle = '#fff'; spaced(pill, cx + 28, cy + 1, 1); cx += pw + 30;
+  font(54, 700); ctx.fillStyle = '#fff'; cx += spaced(c.short || c.title, cx, cy + 2, 0.5);
+  if (s) {
+    const k = eOut(prog(f, s.t, s.t + sec(0.5)));
+    font(50, 300); ctx.fillStyle = 'rgba(255,255,255,.4)'; cx += 30 + spaced('›', cx + 30, cy, 0) + 30;
+    font(50, 500); ctx.fillStyle = `rgba(255,255,255,${0.86 * k})`; cx += spaced((s.no ? s.no + '　' : '') + s.title, cx, cy + 2 + 10 * (1 - k), 0.5);
+  }
+  TL.hudEnd = cx;
+  const all = TL.chapters; font(36, 500); const items = all.map(x => x.short || x.title), gap = 64;
+  const iw = items.map(t => spacedW(t, 0.5)); let rx = W - x0 - iw.reduce((q, w) => q + w, 0) - gap * (items.length - 1);
+  items.forEach((t, j) => {
+    const on = j === c.i; ctx.fillStyle = on ? '#fff' : `rgba(255,255,255,${j < c.i ? 0.5 : 0.32})`;
+    spaced(t, rx, cy + 2, 0.5); if (on) { ctx.fillStyle = 'rgba(32,120,255,1)'; rr(rx, cy + 34, iw[j], 6, 3); ctx.fill(); }
+    rx += iw[j] + gap;
+  });
+  ctx.textBaseline = 'alphabetic'; ctx.restore();
+}
 function drawHud(f) {
   if (SPEC.hud === false || !TL.chapters.length) return;
+  if (barH()) return drawHudBar(f);
   const { c, s } = hudState(f); if (!c) return;
   const a = eOut(prog(f, c.t1, c.t1 + sec(0.6)));
   if (a <= 0) return;
@@ -598,7 +637,7 @@ const ready = (async () => {
   AVATAR = await bitmap('../brand/DEVIN_AVATAR_SQUARE_BLACK_NO_BG.png');
   order.splice(order.indexOf('../brand/DEVIN_AVATAR_SQUARE_BLACK_NO_BG.png'), 1);
   if (BEATS.some(b => (SPEC.edit || {})[b.img]?.scene)) await new Promise((res, rej) => { const s = document.createElement('script'); s.src = `../../${V}/scenes.js`; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
-  TL = build(); await placeCaptions(); window.film.frames = TL.frames;
+  TL = build(); await placeCaptions(); if (barH()) for (const c of TL.caps) if (c.box && c.box.y < barH() + 30) c.box.y = barH() + 30; window.film.frames = TL.frames;
 })();
 window.film = { ready, frames: 0, renderFrame, cues, timeline: () => TL };
 })();

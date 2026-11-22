@@ -1,0 +1,12 @@
+{
+  "recordedAt": "2026-11-22 (JST)",
+  "note": "第 2 部 Devin Review の 2-2。shots_p1_r の後に merge される（p1-0236〜）。0007-0009 は使わない",
+  "frames": {
+    "0000-0006": {
+      "sec": "2-2 見つかった不具合と自動修正",
+      "url": "https://natt.devinenterprise.com/review/natt-cog/usagi-bank/pull/69",
+      "pr": "https://github.com/natt-cog/Usagi-Bank/pull/69",
+      "proves": "Devin Review found 4 findings. Devin automatically fixed all 4 findings. Fixed by Devin (4): Unreadable input bypasses batch error code / Parity test timeout starts too late / Batch quickstart command cannot run verbatim / Untested COBOL parity for open failures"
+    }
+  }
+}

@@ -303,6 +303,66 @@ if (PHASE === 'review2') {
   await sleep(600); await r.shot({ hold: 2.4, mark: 'reviewend' });
   console.log((await main()).slice(0, 3500));
 }
+if (PHASE === 'rvanalyze') {
+  const url = process.env.REVIEW_URL || 'https://natt.devinenterprise.com/review/natt-cog/usagi-ecommerce/pull/3';
+  await r.goto(url, 7000); await tidy();
+  await p.mouse.move(1000, 300); r.cur = { x: 1000, y: 300 };
+  await r.shot({ hold: 2.4, mark: 'rvpr' });
+  const btn = await r.find({ text: 'PRを分析', exact: false, sel: 'main button' });
+  if (!btn) throw new Error('no analyze button');
+  await r.click(btn, { pre: { hlBox: btn }, wait: 1800 });
+  const opt = await r.find({ text: 'このプルリクエスト', exact: false, sel: 'main [role=menuitem], [role=menuitem], [role=option], button' });
+  if (!opt) throw new Error('no option');
+  await r.click(opt, { pre: { hlBox: opt }, wait: 3000 });
+  await r.shot({ hold: 1.6, mark: 'rvclicked' });
+  console.log('AFTER CLICK', (await main()).replace(/\n+/g, ' | ').slice(0, 800));
+  const t0 = Date.now();
+  while (Date.now() - t0 < (Number(process.env.RV_MIN) || 25) * 60000) {
+    await sleep(10000); await r.shot({ kind: 'poll', at: Date.now() - t0 });
+    const t = await main();
+    if (!/生成中|分析中|Analyzing|まだ分析していません/.test(t)) break;
+  }
+  await sleep(3000); await r.shot({ hold: 2.6, mark: 'rvdone' });
+  console.log('DONE', p.url()); console.log((await main()).replace(/\n+/g, ' | ').slice(0, 4000));
+}
+if (PHASE === 'rvwait') {
+  const t0 = Date.now();
+  while (Date.now() - t0 < (Number(process.env.RV_MIN) || 25) * 60000) {
+    const t = await main(); if (!/生成中|分析中|Analyzing/.test(t)) break;
+    await sleep(10000); await r.shot({ kind: 'poll', at: Date.now() - t0 });
+  }
+  await sleep(4000); await r.shot({ hold: 2.6, mark: 'rvdone' });
+  console.log('DONE', Math.round((Date.now() - t0) / 1000), p.url()); console.log((await main()).replace(/\n+/g, ' | ').slice(0, 5000));
+}
+if (PHASE === 'rv69') {
+  await r.goto(process.env.REVIEW_URL || 'https://natt.devinenterprise.com/review/natt-cog/usagi-bank/pull/69', 7000); await tidy();
+  await p.mouse.move(1000, 300); r.cur = { x: 1000, y: 300 };
+  await r.shot({ hold: 2.2, mark: 'rv69' });
+  const tab = await r.find({ text: 'ディスカッション', exact: false, sel: 'main button, main [role=tab]' });
+  await r.click(tab, { pre: { hlBox: tab }, wait: 3000 });
+  await p.evaluate(() => { const e = [...document.querySelectorAll('main p, main div')].find(x => /^Devin Review found/.test(x.innerText.trim()) && x.children.length < 3); (e || document.body).scrollIntoView({ block: 'center', behavior: 'smooth' }); });
+  await sleep(1800); await p.mouse.move(1000, 250); r.cur = { x: 1000, y: 250 };
+  await r.shot({ hold: 2.4, mark: 'rvfound' });
+  const sum = await r.find({ text: 'Fixed by Devin', exact: false, sel: 'main summary' });
+  await r.click(sum, { pre: { hlBox: sum }, wait: 1800 });
+  await p.evaluate(() => { const e = [...document.querySelectorAll('main summary')].find(s => /Fixed by Devin/.test(s.innerText)); e.scrollIntoView({ block: 'start', behavior: 'smooth' }); });
+  await sleep(1800); await p.mouse.move(1250, 150); r.cur = { x: 1250, y: 150 };
+  await r.shot({ hold: 5.0, mark: 'rvlist' });
+  const v = await r.find({ text: 'View findings in Devin Review', exact: false, sel: 'main a, main button' });
+  if (v) { await r.click(v, { pre: { hlBox: v }, wait: 6000 }); await r.shot({ hold: 2.6, mark: 'rvview' }); }
+  console.log('URL', p.url()); console.log((await main()).replace(/\n+/g, ' | ').slice(0, 3000));
+  console.log('TABS', (await (await fetch('http://127.0.0.1:9333/json/list')).json()).filter(x => x.type === 'page').map(x => x.url).join(' '));
+}
+if (PHASE === 'rv3disc') {
+  await r.goto(process.env.REVIEW_URL || 'https://natt.devinenterprise.com/review/natt-cog/usagi-ecommerce/pull/3', 7000); await tidy();
+  await p.mouse.move(1000, 300); r.cur = { x: 1000, y: 300 };
+  await r.shot({ hold: 1.0 });
+  const tab = await r.find({ text: 'ディスカッション', exact: false, sel: 'main button, main [role=tab]' });
+  await r.click(tab, { pre: { hlBox: tab }, wait: 3000 });
+  await p.evaluate(() => { const e = [...document.querySelectorAll('main h1, main h2, main h3, main p, main div')].find(x => /Devin Review: No Issues Found/.test(x.innerText.trim()) && x.innerText.length < 80); (e || document.body).scrollIntoView({ block: 'center', behavior: 'smooth' }); });
+  await sleep(1800); await p.mouse.move(1200, 250); r.cur = { x: 1200, y: 250 };
+  await r.shot({ hold: 2.8, mark: 'rv3none' });
+}
 if (PHASE === 'sec1') {
   await r.goto(ORG + '/security/new', 6000); await tidy();
   await p.mouse.move(700, 250); r.cur = { x: 700, y: 250 };
